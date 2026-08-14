@@ -59,42 +59,72 @@ class ProductProduct(models.Model):
             current_stock = self.qty_available
             manual_stock = self.manual_stock
             
-            # Calcular la diferencia
-            difference = manual_stock - current_stock
+            _logger.info(f"Actualizando stock de {self.name}: {current_stock} -> {manual_stock}")
             
-            if difference != 0:
-                # Usar el wizard de cambio de stock
-                stock_change_wizard = self.env['stock.change.product.qty'].create({
-                    'product_id': self.id,
-                    'product_tmpl_id': self.product_tmpl_id.id,
-                    'new_quantity': manual_stock,
-                })
-                
-                stock_change_wizard.change_product_qty()
-                
-                _logger.info(f'Stock actualizado para producto {self.name}: {current_stock} -> {manual_stock}')
-                
-                # Marcar como modificado
-                self.write({
-                    'is_manual_stock_modified': True,
-                    'last_manual_stock_update': fields.Datetime.now(),
-                    'last_manual_stock_user': self.env.user.id,
-                })
-                
-                # Sincronizar con el sitio web
-                self._update_website_stock()
-                
-                return True
-            else:
-                _logger.info(f'No hay cambios de stock para producto {self.name}')
-                return False
+            # Usar el wizard de cambio de stock
+            stock_change_wizard = self.env['stock.change.product.qty'].create({
+                'product_id': self.id,
+                'product_tmpl_id': self.product_tmpl_id.id,
+                'new_quantity': manual_stock,
+            })
+            
+            stock_change_wizard.change_product_qty()
+            
+            _logger.info(f'Stock actualizado para producto {self.name}: {current_stock} -> {manual_stock}')
+            
+            # Marcar como modificado en el template
+            self.product_tmpl_id.write({
+                'is_manual_stock_modified': True,
+                'last_manual_stock_update': fields.Datetime.now(),
+                'last_manual_stock_user': self.env.user.id,
+            })
+            
+            # Sincronizar con el sitio web
+            self._update_website_stock_internal()
+            
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Éxito',
+                    'message': f'Stock actualizado correctamente: {current_stock} -> {manual_stock}',
+                    'type': 'success',
+                    'sticky': True,
+                }
+            }
                 
         except Exception as e:
             _logger.error(f'Error al actualizar stock: {str(e)}')
             raise UserError(_('Error al actualizar el stock: %s') % str(e))
 
-    def _update_website_stock(self):
-        """Actualizar disponibilidad en el sitio web"""
+    def action_sync_stock_to_website(self):
+        """Método público para sincronizar stock con el sitio web"""
+        self.ensure_one()
+        
+        try:
+            # Verificar permisos
+            self._check_user_permission()
+            
+            # Actualizar información de stock para el sitio web
+            self._update_website_stock_internal()
+            
+            return {
+                'type': 'ir.actions.client',
+                'tag': 'display_notification',
+                'params': {
+                    'title': 'Éxito',
+                    'message': 'Stock sincronizado con el sitio web correctamente',
+                    'type': 'success',
+                    'sticky': False,
+                }
+            }
+            
+        except Exception as e:
+            _logger.error(f'Error al sincronizar con sitio web: {str(e)}')
+            raise UserError(_('Error al sincronizar con sitio web: %s') % str(e))
+
+    def _update_website_stock_internal(self):
+        """Método interno para actualizar disponibilidad en el sitio web"""
         self.ensure_one()
         
         try:
@@ -127,26 +157,13 @@ class ProductProduct(models.Model):
                     'message': 'El stock no puede ser negativo.',
                 }
             }
-        
-        # Si el usuario es asociado, actualizar automáticamente
-        if self.env.user.is_asociado or self.env.user.has_group('base.group_system'):
-            self.is_manual_stock_modified = True
-            self.last_manual_stock_update = fields.Datetime.now()
-            self.last_manual_stock_user = self.env.user.id
 
     def write(self, vals):
         """Override para manejar actualizaciones de stock"""
         # Verificar si se está modificando el stock manual
-        if 'manual_stock' in vals:
+        if 'manual_stock' in vals and vals['manual_stock'] is not None:
             self._check_user_permission()
             
         result = super(ProductProduct, self).write(vals)
-        
-        # Si se modificó el stock manual, actualizar el stock real
-        if 'manual_stock' in vals and vals['manual_stock']:
-            for record in self:
-                if record.is_manual_stock_modified:
-                    record.action_update_real_stock()
-                    record._update_website_stock()
         
         return result

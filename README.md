@@ -64,3 +64,33 @@ FUNCIONAMIENTO:
         Registra quién y cuándo hizo la modificación
 
     El stock modificado se refleja inmediatamente en el sitio web
+
+    
+#LISTA COMPLETA DE FUNCIONALIDADES Y SU UBICACIÓN
+
+A. Campo "Es Asociado" en Usuarios
+text
+
+📍 Ubicación: Ajustes → Usuarios → Usuario específico → Pestaña "Derechos de acceso"
+✅ Qué ver: Checkbox "Es Asociado" en la sección "La Casa Nueva"
+
+B. Stock Manual en Plantilla de Producto
+text
+
+📍 Ubicación: Inventario → Productos → Productos → Seleccionar producto → Pestaña "Inventario"
+✅ Qué ver: 
+   - Campo "Stock Manual" (editable)
+   - Campo "Modificado Manualmente" (solo lectura)
+   - Campo "Última Actualización" (solo lectura)
+   - Campo "Actualizado Por" (solo lectura)
+   - Botón "Actualizar Stock Manual" (verde)
+   - Botón "Sincronizar con Sitio Web" (gris)
+
+C. Stock Manual en Variantes de Producto
+text
+
+📍 Ubicación: Inventario → Productos → Variantes de producto
+✅ Qué ver: 
+   - Mismo grupo de campos que en la plantilla
+   - Botón "Actualizar Stock Real"
+   - Botón "Sincronizar con Sitio Web"

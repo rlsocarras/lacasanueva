@@ -68,14 +68,17 @@ class ProductTemplate(models.Model):
             'last_manual_stock_user': self.env.user.id,
         })
         
+        # Sincronizar con sitio web
+        self.action_sync_stock_to_website()
+        
         return {
             'type': 'ir.actions.client',
             'tag': 'display_notification',
             'params': {
                 'title': 'Éxito',
-                'message': 'Stock actualizado correctamente',
+                'message': f'Stock actualizado correctamente a {self.manual_stock}',
                 'type': 'success',
-                'sticky': False,
+                'sticky': True,
             }
         }
 
@@ -83,15 +86,28 @@ class ProductTemplate(models.Model):
         """Sincronizar stock con el sitio web"""
         self.ensure_one()
         
+        # Verificar permisos
+        if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
+            raise UserError(_('Solo los usuarios asociados pueden sincronizar stock.'))
+        
         # Actualizar disponibilidad en el sitio web
         self.website_published = True
         self.is_published = True
         
         # Actualizar información de stock para el sitio web
         for variant in self.product_variant_ids:
-            variant._update_website_stock()
+            variant._update_website_stock_internal()
         
-        return True
+        return {
+            'type': 'ir.actions.client',
+            'tag': 'display_notification',
+            'params': {
+                'title': 'Éxito',
+                'message': 'Stock sincronizado con el sitio web correctamente',
+                'type': 'success',
+                'sticky': False,
+            }
+        }
 
     def write(self, vals):
         """Override para sincronizar automáticamente con el sitio web"""

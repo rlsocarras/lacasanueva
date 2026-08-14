@@ -8,7 +8,7 @@
         <field name="arch" type="xml">
             <!-- Agregar campo de asociado en la pestaña de Access Rights -->
             <xpath expr="//page[@name='access_rights']/group" position="inside">
-                <group string="La Casa Nueva">
+                <group string="La Casa Nueva" colspan="4">
                     <field name="is_asociado" 
                            widget="boolean_toggle"
                            help="Marcar si el usuario es un asociado con permisos especiales"/>
@@ -17,16 +17,17 @@
         </field>
     </record>
 
-    <!-- Vista de lista de usuarios -->
+    <!-- Vista de lista de usuarios - CORREGIDA -->
     <record id="view_users_list_inherit_la_casa_nueva" model="ir.ui.view">
         <field name="name">res.users.list.inherit.la.casa.nueva</field>
         <field name="model">res.users</field>
-        <field name="inherit_id" ref="base.view_users_simple_tree"/>
+        <field name="inherit_id" ref="base.view_users_tree"/>
         <field name="arch" type="xml">
             <xpath expr="//list" position="inside">
                 <field name="is_asociado" 
                        optional="show"
-                       widget="boolean_toggle"/>
+                       widget="boolean_toggle"
+                       string="Es Asociado"/>
             </xpath>
         </field>
     </record>

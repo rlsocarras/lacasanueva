@@ -9,38 +9,39 @@
             <!-- Agregar sección de stock manual -->
             <xpath expr="//page[@name='inventory']" position="inside">
                 <group string="Stock Manual La Casa Nueva" 
-                       name="manual_stock_variant_group"
-                       invisible="not context.get('show_manual_stock', False)">
-                    <group>
+                       name="manual_stock_variant_group">
+                    <group colspan="2">
                         <field name="manual_stock" 
                                string="Stock Manual"
                                placeholder="Ingrese el stock manual"
                                help="Stock modificado manualmente por usuarios asociados"/>
+                    </group>
+                    <group colspan="2">
                         <field name="is_manual_stock_modified" 
                                string="Modificado Manualmente"
                                readonly="1"/>
                     </group>
-                    <group>
+                    <group colspan="2">
                         <field name="last_manual_stock_update" 
                                string="Última Actualización"
                                readonly="1"/>
+                    </group>
+                    <group colspan="2">
                         <field name="last_manual_stock_user" 
                                string="Actualizado Por"
                                readonly="1"/>
                     </group>
-                    <group colspan="2">
+                    <group colspan="4">
                         <button name="action_update_real_stock" 
                                 type="object" 
                                 string="Actualizar Stock Real"
                                 class="btn-primary"
-                                icon="fa-refresh"
-                                invisible="not context.get('is_asociado', False)"/>
-                        <button name="_update_website_stock" 
+                                icon="fa-refresh"/>
+                        <button name="action_sync_stock_to_website" 
                                 type="object" 
                                 string="Sincronizar con Sitio Web"
                                 class="btn-secondary"
-                                icon="fa-globe"
-                                invisible="not context.get('is_asociado', False)"/>
+                                icon="fa-globe"/>
                     </group>
                 </group>
             </xpath>
@@ -56,14 +57,10 @@
             <xpath expr="//list" position="inside">
                 <field name="manual_stock" 
                        string="Stock Manual"
-                       optional="show"
-                       widget="float"
-                       invisible="not context.get('is_asociado', False)"/>
+                       optional="show"/>
                 <field name="is_manual_stock_modified" 
                        string="Modificado"
-                       optional="hide"
-                       widget="boolean_toggle"
-                       invisible="not context.get('is_asociado', False)"/>
+                       optional="hide"/>
             </xpath>
         </field>
     </record>
