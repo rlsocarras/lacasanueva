@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario de variante de producto -->
+    <record id="product_product_form_view_inherit_la_casa_nueva" model="ir.ui.view">
+        <field name="name">product.product.form.inherit.la.casa.nueva</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="arch" type="xml">
+            <!-- Agregar sección de stock manual -->
+            <xpath expr="//page[@name='inventory']" position="inside">
+                <group string="Stock Manual La Casa Nueva" 
+                       name="manual_stock_variant_group"
+                       invisible="not context.get('show_manual_stock', False)">
+                    <group>
+                        <field name="manual_stock" 
+                               string="Stock Manual"
+                               placeholder="Ingrese el stock manual"
+                               help="Stock modificado manualmente por usuarios asociados"/>
+                        <field name="is_manual_stock_modified" 
+                               string="Modificado Manualmente"
+                               readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="last_manual_stock_update" 
+                               string="Última Actualización"
+                               readonly="1"/>
+                        <field name="last_manual_stock_user" 
+                               string="Actualizado Por"
+                               readonly="1"/>
+                    </group>
+                    <group colspan="2">
+                        <button name="action_update_real_stock" 
+                                type="object" 
+                                string="Actualizar Stock Real"
+                                class="btn-primary"
+                                icon="fa-refresh"
+                                invisible="not context.get('is_asociado', False)"/>
+                        <button name="_update_website_stock" 
+                                type="object" 
+                                string="Sincronizar con Sitio Web"
+                                class="btn-secondary"
+                                icon="fa-globe"
+                                invisible="not context.get('is_asociado', False)"/>
+                    </group>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista de lista de variantes de producto -->
+    <record id="product_product_list_view_inherit_la_casa_nueva" model="ir.ui.view">
+        <field name="name">product.product.list.inherit.la.casa.nueva</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="manual_stock" 
+                       string="Stock Manual"
+                       optional="show"
+                       widget="float"
+                       invisible="not context.get('is_asociado', False)"/>
+                <field name="is_manual_stock_modified" 
+                       string="Modificado"
+                       optional="hide"
+                       widget="boolean_toggle"
+                       invisible="not context.get('is_asociado', False)"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

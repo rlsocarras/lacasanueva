@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vista de formulario de usuarios -->
+    <record id="view_users_form_inherit_la_casa_nueva" model="ir.ui.view">
+        <field name="name">res.users.form.inherit.la.casa.nueva</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_form"/>
+        <field name="arch" type="xml">
+            <!-- Agregar campo de asociado en la pestaña de Access Rights -->
+            <xpath expr="//page[@name='access_rights']/group" position="inside">
+                <group string="La Casa Nueva">
+                    <field name="is_asociado" 
+                           widget="boolean_toggle"
+                           help="Marcar si el usuario es un asociado con permisos especiales"/>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Vista de lista de usuarios -->
+    <record id="view_users_list_inherit_la_casa_nueva" model="ir.ui.view">
+        <field name="name">res.users.list.inherit.la.casa.nueva</field>
+        <field name="model">res.users</field>
+        <field name="inherit_id" ref="base.view_users_simple_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//list" position="inside">
+                <field name="is_asociado" 
+                       optional="show"
+                       widget="boolean_toggle"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>
