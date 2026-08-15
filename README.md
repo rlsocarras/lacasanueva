@@ -47,6 +47,7 @@ CARACTERÍSTICAS IMPLEMENTADAS:
 ✅ Manejo de errores y validaciones
 ✅ Tracking de modificaciones
 ✅ Botones intuitivos en la interfaz
+
 FUNCIONAMIENTO:
 
     Usuario Asociado accede a la ficha de un producto

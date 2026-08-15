@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La Casa Nueva - Módulo de Gestión de Stock</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2E86C1 0%, #1B4F72 100%);
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            border-radius: 10px 10px 0 0;
+        }
+        
+        .header h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .header h2 {
+            font-size: 1.5em;
+            font-weight: 300;
+            margin-bottom: 30px;
+        }
+        
+        .header img {
+            width: 128px;
+            height: 128px;
+            border-radius: 50%;
+            border: 4px solid white;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        .badge {
+            display: inline-block;
+            background-color: #F39C12;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 5px;
+        }
+        
+        .content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #fafafa;
+            border-left: 5px solid #2E86C1;
+            border-radius: 5px;
+        }
+        
+        .section h3 {
+            color: #2E86C1;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        
+        .section h4 {
+            color: #1B4F72;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+        
+        .feature-card {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .feature-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+        }
+        
+        .feature-card h4 {
+            color: #2E86C1;
+            margin-bottom: 10px;
+        }
+        
+        .steps {
+            counter-reset: step-counter;
+            list-style-type: none;
+            padding-left: 0;
+        }
+        
+        .steps li {
+            counter-increment: step-counter;
+            margin-bottom: 15px;
+            padding-left: 50px;
+            position: relative;
+            font-weight: 500;
+        }
+        
+        .steps li::before {
+            content: counter(step-counter);
+            background-color: #2E86C1;
+            color: white;
+            font-weight: bold;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            left: 0;
+            top: -5px;
+        }
+        
+        .alert {
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        
+        .alert-info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        
+        .alert-success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        
+        .alert-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        th {
+            background-color: #2E86C1;
+            color: white;
+        }
+        
+        tr:hover {
+            background-color: #f5f5f5;
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 20px;
+            margin-top: 40px;
+            color: #666;
+        }
+        
+        .button {
+            display: inline-block;
+            background-color: #2E86C1;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: bold;
+            margin: 10px;
+            transition: background-color 0.3s ease;
+        }
+        
+        .button:hover {
+            background-color: #1B4F72;
+        }
+        
+        .screenshot {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <img src="icon.png" alt="La Casa Nueva Logo">
+            <h1>🏠 La Casa Nueva</h1>
+            <h2>Módulo de Gestión de Stock Manual para Odoo 18</h2>
+            <span class="badge">Versión 18.0.1.0.0</span>
+            <span class="badge">LGPL-3</span>
+            <span class="badge">Producción</span>
+        </div>
+        
+        <!-- Content -->
+        <div class="content">
+            <!-- Descripción General -->
+            <div class="section">
+                <h3>📋 Descripción General</h3>
+                <p>
+                    <strong>La Casa Nueva</strong> es un módulo completo para Odoo 18 que permite 
+                    la gestión eficiente del stock de productos de manera manual, sin necesidad 
+                    de realizar entradas de almacén complejas. Diseñado específicamente para 
+                    empresas que necesitan un control rápido y directo sobre su inventario.
+                </p>
+                
+                <div class="alert alert-info">
+                    <strong>💡 ¿Para quién es este módulo?</strong><br>
+                    Empresas que necesitan actualizar rápidamente el stock de sus productos 
+                    sin procesos administrativos complejos, manteniendo el control y la trazabilidad.
+                </div>
+            </div>
+            
+            <!-- Características Principales -->
+            <div class="section">
+                <h3>✨ Características Principales</h3>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">📦</div>
+                        <h4>Stock Manual</h4>
+                        <p>Modifica el stock directamente desde la ficha del producto sin crear entradas de almacén.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🌐</div>
+                        <h4>Sincronización Web</h4>
+                        <p>El stock modificado se refleja automáticamente en la plantilla del sitio web.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">👥</div>
+                        <h4>Control de Acceso</h4>
+                        <p>Solo usuarios marcados como "Asociados" pueden modificar el stock manualmente.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <h4>Trazabilidad</h4>
+                        <p>Registro completo de quién modificó el stock y cuándo se realizó el cambio.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">⚡</div>
+                        <h4>Actualización Rápida</h4>
+                        <p>Un solo clic para actualizar todo el stock de un producto y sus variantes.</p>
+                    </div>
+                    
+                    <div class="feature-card">
+                        <div class="feature-icon">🔒</div>
+                        <h4>Seguridad</h4>
+                        <p>Validaciones de permisos y prevención de stock negativo.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Requisitos -->
+            <div class="section">
+                <h3>🔧 Requisitos del Sistema</h3>
+                <table>
+                    <tr>
+                        <th>Requisito</th>
+                        <th>Versión</th>
+                        <th>Notas</th>
+                    </tr>
+                    <tr>
+                        <td>Odoo</td>
+                        <td>18.0</td>
+                        <td>Community o Enterprise</td>
+                    </tr>
+                    <tr>
+                        <td>Python</td>
+                        <td>3.10+</td>
+                        <td>Incluido con Odoo 18</td>
+                    </tr>
+                    <tr>
+                        <td>Módulos Dependientes</td>
+                        <td>-</td>
+                        <td>stock, product, website_sale, sale_management</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Instalación -->
+            <div class="section">
+                <h3>🚀 Instalación</h3>
+                <ol class="steps">
+                    <li>Copiar la carpeta <code>la_casa_nueva</code> al directorio de addons de Odoo</li>
+                    <li>Reiniciar el servidor de Odoo</li>
+                    <li>Ir a <strong>Aplicaciones</strong> → Actualizar lista de aplicaciones</li>
+                    <li>Buscar <strong>"La Casa Nueva"</strong> en el listado</li>
+                    <li>Hacer clic en <strong>Instalar</strong></li>
+                </ol>
+                
+                <div class="alert alert-success">
+                    <strong>✅ Instalación Completa</strong><br>
+                    Una vez instalado, el módulo estará listo para configurar y usar.
+                </div>
+            </div>
+            
+            <!-- Configuración -->
+            <div class="section">
+                <h3>⚙️ Configuración</h3>
+                <h4>1. Configurar Usuarios Asociados</h4>
+                <ol class="steps">
+                    <li>Ir a <strong>Ajustes → Usuarios</strong></li>
+                    <li>Seleccionar el usuario que será asociado</li>
+                    <li>Ir a la pestaña <strong>Derechos de acceso</strong></li>
+                    <li>Marcar el checkbox <strong>"Es Asociado"</strong></li>
+                    <li>Guardar los cambios</li>
+                </ol>
+                
+                <h4>2. Configurar Productos</h4>
+                <ol class="steps">
+                    <li>Ir a <strong>Inventario → Productos</strong></li>
+                    <li>Seleccionar un producto</li>
+                    <li>Ir a la pestaña <strong>Inventario</strong></li>
+                    <li>Encontrar la sección <strong>"Stock Manual La Casa Nueva"</strong></li>
+                </ol>
+            </div>
+            
+            <!-- Uso del Módulo -->
+            <div class="section">
+                <h3>📖 Uso del Módulo</h3>
+                <h4>Actualización de Stock Manual</h4>
+                <ol class="steps">
+                    <li>Acceder a la ficha del producto como usuario asociado</li>
+                    <li>Ir a la pestaña <strong>Inventario</strong></li>
+                    <li>Ingresar el nuevo stock en el campo <strong>"Stock Manual"</strong></li>
+                    <li>Hacer clic en <strong>"Actualizar Stock Manual"</strong></li>
+                    <li>Confirmar la actualización</li>
+                </ol>
+                
+                <h4>Sincronización con Sitio Web</h4>
+                <ol class="steps">
+                    <li>Después de actualizar el stock</li>
+                    <li>Hacer clic en <strong>"Sincronizar con Sitio Web"</strong></li>
+                    <li>El stock se actualizará automáticamente en la web</li>
+                </ol>
+                
+                <div class="alert alert-warning">
+                    <strong>⚠️ Importante:</strong><br>
+                    Solo los usuarios marcados como "Asociados" o administradores del sistema 
+                    pueden realizar estas operaciones.
+                </div>
+            </div>
+            
+            <!-- Funcionalidades Técnicas -->
+            <div class="section">
+                <h3>🔬 Funcionalidades Técnicas</h3>
+                <ul>
+                    <li><strong>Campos Relacionados:</strong> El stock manual se sincroniza entre plantilla y variantes</li>
+                    <li><strong>Tracking:</strong> Registro automático de cambios con usuario y fecha</li>
+                    <li><strong>Validaciones:</strong> Prevención de stock negativo y permisos de usuario</li>
+                    <li><strong>Wizard de Stock:</strong> Uso del wizard nativo de Odoo para cambios de stock</li>
+                    <li><strong>Notificaciones:</strong> Mensajes de éxito/error para mejor UX</li>
+                    <li><strong>Integración Web:</strong> Actualización automática de disponibilidad en eCommerce</li>
+                </ul>
+            </div>
+            
+            <!-- Solución de Problemas -->
+            <div class="section">
+                <h3>🛠️ Solución de Problemas</h3>
+                <table>
+                    <tr>
+                        <th>Problema</th>
+                        <th>Solución</th>
+                    </tr>
+                    <tr>
+                        <td>No veo el botón de actualizar stock</td>
+                        <td>Verificar que el usuario esté marcado como "Asociado"</td>
+                    </tr>
+                    <tr>
+                        <td>Error al actualizar stock</td>
+                        <td>Verificar permisos y que el producto tenga ubicación de stock configurada</td>
+                    </tr>
+                    <tr>
+                        <td>El stock no se refleja en la web</td>
+                        <td>Asegurarse de que el producto esté publicado en el sitio web</td>
+                    </tr>
+                    <tr>
+                        <td>Stock negativo no permitido</td>
+                        <td>Esta es una característica de seguridad, no un error</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Soporte -->
+            <div class="section">
+                <h3>📞 Soporte Técnico</h3>
+                <p>Para soporte técnico y consultas:</p>
+                <ul>
+                    <li><strong>Email:</strong> soporte@lacasanueva.com</li>
+                    <li><strong>Sitio Web:</strong> www.lacasanueva.com</li>
+                    <li><strong>Horario:</strong> Lunes a Viernes, 9:00 - 18:00</li>
+                </ul>
+                
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="mailto:soporte@lacasanueva.com" class="button">📧 Contactar Soporte</a>
+                    <a href="https://www.lacasanueva.com" class="button">🌐 Visitar Sitio Web</a>
+                </div>
+            </div>
+            
+            <!-- Versiones -->
+            <div class="section">
+                <h3>📅 Historial de Versiones</h3>
+                <table>
+                    <tr>
+                        <th>Versión</th>
+                        <th>Fecha</th>
+                        <th>Cambios</th>
+                    </tr>
+                    <tr>
+                        <td>18.0.1.0.0</td>
+                        <td>2024</td>
+                        <td>Versión inicial para Odoo 18</td>
+                    </tr>
+                </table>
+            </div>
+            
+            <!-- Licencia -->
+            <div class="section">
+                <h3>⚖️ Licencia</h3>
+                <p>
+                    Este módulo está licenciado bajo <strong>LGPL-3</strong> (GNU Lesser General Public License v3.0).
+                    Esto significa que puedes:
+                </p>
+                <ul>
+                    <li>✅ Usar el módulo libremente</li>
+                    <li>✅ Modificar el código según tus necesidades</li>
+                    <li>✅ Distribuir el módulo modificado</li>
+                    <li>✅ Usar en proyectos comerciales</li>
+                </ul>
+            </div>
+            
+            <!-- Footer -->
+            <div class="footer">
+                <p>
+                    © 2024 La Casa Nueva. Todos los derechos reservados.<br>
+                    Desarrollado con ❤️ para Odoo 18<br>
+                    Versión del módulo: 18.0.1.0.0
+                </p>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
