@@ -4,10 +4,10 @@
 
 bash
 
-mkdir -p la_casa_nueva/models
-mkdir -p la_casa_nueva/views
-mkdir -p la_casa_nueva/security
-mkdir -p la_casa_nueva/static/description
+mkdir -p lacasanueva/models
+mkdir -p lacasanueva/views
+mkdir -p lacasanueva/security
+mkdir -p lacasanueva/static/description
 
     Copiar todos los archivos en sus respectivas ubicaciones
 
@@ -19,7 +19,7 @@ bash
 sudo systemctl restart odoo18
 
 # Actualizar lista de módulos
-./odoo-bin -c /etc/odoo18.conf -u la_casa_nueva --stop-after-init
+./odoo-bin -c /etc/odoo18.conf -u lacasanueva --stop-after-init
 
     Instalar el módulo:
 
