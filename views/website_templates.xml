@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="product_manual_stock_indicator" 
+              inherit_id="website_sale.product" 
+              name="Product Manual Stock Indicator"
+              priority="99">
+        <xpath expr="//div[@id='product_option_block']" position="before">
+            <!-- 
+                IMPORTANTE: 'product' en la plantilla website_sale.product 
+                es un product.template, no un product.product.
+                Por eso usamos el campo _summary del template.
+            -->
+            <div t-if="product and product.is_manual_stock_modified_summary and 
+                        request.env.user.has_group('base.group_user')"
+                 class="alert alert-info small mt-2">
+                <i class="fa fa-info-circle"/> 
+                <strong>Modo manual:</strong> Se muestra el stock manual 
+                (<t t-esc="int(product.manual_stock_summary)"/>), no el stock real 
+                (<t t-esc="int(product.qty_available)"/>).
+            </div>
+        </xpath>
+    </template>
+</odoo>

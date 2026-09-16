@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Vista de formulario de variante de producto -->
-    <record id="product_product_form_view_inherit_la_casa_nueva" model="ir.ui.view">
-        <field name="name">product.product.form.inherit.la.casa.nueva</field>
+    <record id="product_product_form_view_la_casa_nueva" model="ir.ui.view">
+        <field name="name">product.product.form.la.casa.nueva</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
+        <field name="priority" eval="99"/>
         <field name="arch" type="xml">
-            <!-- Agregar sección de stock manual -->
             <xpath expr="//page[@name='inventory']" position="inside">
-                <group string="Stock Manual La Casa Nueva" 
-                       name="manual_stock_variant_group">
+                <group string="Stock Manual La Casa Nueva (Variante)" 
+                       name="manual_stock_variant_group"
+                       colspan="4">
+                    
+                    <div colspan="4" class="alert alert-info">
+                        <i class="fa fa-info-circle"/> 
+                        Stock informativo para el sitio web. 
+                        <strong>NO afecta al stock real.</strong>
+                    </div>
+                    
                     <group colspan="2">
                         <field name="manual_stock" 
                                string="Stock Manual"
                                placeholder="Ingrese el stock manual"
-                               help="Stock modificado manualmente por usuarios asociados"/>
+                               help="Stock manual de esta variante"/>
                     </group>
+                    
                     <group colspan="2">
                         <field name="is_manual_stock_modified" 
-                               string="Modificado Manualmente"
+                               string="Modificado"
                                readonly="1"/>
-                    </group>
-                    <group colspan="2">
                         <field name="last_manual_stock_update" 
                                string="Última Actualización"
                                readonly="1"/>
-                    </group>
-                    <group colspan="2">
                         <field name="last_manual_stock_user" 
                                string="Actualizado Por"
                                readonly="1"/>
                     </group>
+                    
                     <group colspan="4">
-                        <button name="action_update_real_stock" 
-                                type="object" 
-                                string="Actualizar Stock Real"
-                                class="btn-primary"
-                                icon="fa-refresh"/>
                         <button name="action_sync_stock_to_website" 
                                 type="object" 
                                 string="Sincronizar con Sitio Web"
@@ -44,23 +44,6 @@
                                 icon="fa-globe"/>
                     </group>
                 </group>
-            </xpath>
-        </field>
-    </record>
-
-    <!-- Vista de lista de variantes de producto -->
-    <record id="product_product_list_view_inherit_la_casa_nueva" model="ir.ui.view">
-        <field name="name">product.product.list.inherit.la.casa.nueva</field>
-        <field name="model">product.product</field>
-        <field name="inherit_id" ref="product.product_product_tree_view"/>
-        <field name="arch" type="xml">
-            <xpath expr="//list" position="inside">
-                <field name="manual_stock" 
-                       string="Stock Manual"
-                       optional="show"/>
-                <field name="is_manual_stock_modified" 
-                       string="Modificado"
-                       optional="hide"/>
             </xpath>
         </field>
     </record>

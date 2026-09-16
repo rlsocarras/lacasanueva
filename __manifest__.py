@@ -19,13 +19,15 @@
         'stock',
         'product',
         'website_sale',
+        'website_sale_stock',
         'sale_management',
     ],
     'data': [
         'security/ir.model.access.csv',
         'views/res_users_views.xml',
         'views/product_template_views.xml',
-        #'views/product_product_views.xml',
+        'views/product_product_views.xml',
+        'views/website_templates.xml',
     ],
     'demo': [],
     'images': [

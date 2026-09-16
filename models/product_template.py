@@ -1,100 +1,114 @@
 # -*- coding: utf-8 -*-
 from odoo import models, fields, api, _
-from odoo.exceptions import UserError, ValidationError
+from odoo.exceptions import UserError
 
 
 class ProductTemplate(models.Model):
     _inherit = 'product.template'
 
+    # Campo editable en template (solo si tiene 1 variante)
     manual_stock = fields.Float(
         string='Stock Manual',
-        help='Stock modificado manualmente por usuarios asociados',
+        help='Stock manual. Editable cuando el producto tiene 1 variante o ninguna.',
         digits='Product Unit of Measure',
-        tracking=True,
+        compute='_compute_manual_stock',
+        inverse='_inverse_manual_stock',
+        store=True,
     )
     
-    is_manual_stock_modified = fields.Boolean(
-        string='Stock Modificado Manualmente',
-        default=False,
-        help='Indica si el stock fue modificado manualmente',
+    # Campos resumen (siempre readonly)
+    manual_stock_summary = fields.Float(
+        string='Stock Manual Total',
+        help='Suma del stock manual de todas las variantes.',
+        digits='Product Unit of Measure',
+        compute='_compute_manual_stock_summary',
+        store=True,
     )
     
-    last_manual_stock_update = fields.Datetime(
-        string='Última Actualización Manual',
-        readonly=True,
+    is_manual_stock_modified_summary = fields.Boolean(
+        string='Modificado',
+        compute='_compute_manual_stock_summary',
+        store=True,
     )
     
-    last_manual_stock_user = fields.Many2one(
+    last_manual_stock_update_summary = fields.Datetime(
+        string='Última Actualización',
+        compute='_compute_manual_stock_summary',
+        store=True,
+    )
+    
+    last_manual_stock_user_summary = fields.Many2one(
         'res.users',
         string='Actualizado Por',
-        readonly=True,
+        compute='_compute_manual_stock_summary',
+        store=True,
+    )
+    
+    has_variants = fields.Boolean(
+        string='Tiene Variantes',
+        compute='_compute_has_variants',
     )
 
-    @api.onchange('manual_stock')
-    def _onchange_manual_stock(self):
-        """Validación cuando se modifica el stock manual"""
-        if self.manual_stock < 0:
-            return {
-                'warning': {
-                    'title': 'Stock Negativo',
-                    'message': 'El stock no puede ser negativo.',
-                }
-            }
+    is_variant_view = fields.Boolean(
+        string='Es Vista de Variante',
+        compute='_compute_is_variant_view',
+        store=False,
+    )
 
-    def action_update_manual_stock(self):
-        """Actualizar el stock manual para todas las variantes del producto"""
-        self.ensure_one()
-        
-        # Verificar si el usuario es asociado o administrador
-        if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
-            raise UserError(_('Solo los usuarios asociados pueden modificar el stock manualmente.'))
-        
-        # Actualizar stock en todas las variantes
-        for variant in self.product_variant_ids:
-            variant.write({
-                'manual_stock': self.manual_stock,
-                'is_manual_stock_modified': True,
-                'last_manual_stock_update': fields.Datetime.now(),
-                'last_manual_stock_user': self.env.user.id,
-            })
+    def _compute_is_variant_view(self):
+        for template in self:
+            template.is_variant_view = False
+
+    @api.depends('product_variant_ids.manual_stock')
+    def _compute_manual_stock(self):
+        """Stock manual del template (sincronizado con la variante única)"""
+        for template in self:
+            if len(template.product_variant_ids) == 1:
+                template.manual_stock = template.product_variant_ids.manual_stock
+            else:
+                template.manual_stock = 0.0
+
+    def _inverse_manual_stock(self):
+        """Escribir el stock manual en la variante única"""
+        for template in self:
+            if len(template.product_variant_ids) == 1:
+                template.product_variant_ids.write({
+                    'manual_stock': template.manual_stock,
+                })
+
+    @api.depends('product_variant_ids.manual_stock',
+                 'product_variant_ids.is_manual_stock_modified',
+                 'product_variant_ids.last_manual_stock_update',
+                 'product_variant_ids.last_manual_stock_user')
+    def _compute_manual_stock_summary(self):
+        """Resumen del stock manual de todas las variantes"""
+        for template in self:
+            variants = template.product_variant_ids
             
-            # Actualizar el stock real
-            variant.action_update_real_stock()
-        
-        # Actualizar la plantilla
-        self.write({
-            'is_manual_stock_modified': True,
-            'last_manual_stock_update': fields.Datetime.now(),
-            'last_manual_stock_user': self.env.user.id,
-        })
-        
-        # Sincronizar con sitio web
-        self.action_sync_stock_to_website()
-        
-        return {
-            'type': 'ir.actions.client',
-            'tag': 'display_notification',
-            'params': {
-                'title': 'Éxito',
-                'message': f'Stock actualizado correctamente a {self.manual_stock}',
-                'type': 'success',
-                'sticky': True,
-            }
-        }
+            template.manual_stock_summary = sum(variants.mapped('manual_stock'))
+            
+            template.is_manual_stock_modified_summary = any(
+                variants.mapped('is_manual_stock_modified')
+            )
+            
+            updates = [u for u in variants.mapped('last_manual_stock_update') if u]
+            template.last_manual_stock_update_summary = max(updates) if updates else False
+            
+            users = [u for u in variants.mapped('last_manual_stock_user') if u]
+            template.last_manual_stock_user_summary = users[-1] if users else False
+
+    @api.depends('product_variant_count')
+    def _compute_has_variants(self):
+        for template in self:
+            template.has_variants = template.product_variant_count > 1
 
     def action_sync_stock_to_website(self):
-        """Sincronizar stock con el sitio web"""
+        """Sincronizar stock manual con el sitio web"""
         self.ensure_one()
         
-        # Verificar permisos
         if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
             raise UserError(_('Solo los usuarios asociados pueden sincronizar stock.'))
         
-        # Actualizar disponibilidad en el sitio web
-        self.website_published = True
-        self.is_published = True
-        
-        # Actualizar información de stock para el sitio web
         for variant in self.product_variant_ids:
             variant._update_website_stock_internal()
         
@@ -110,12 +124,9 @@ class ProductTemplate(models.Model):
         }
 
     def write(self, vals):
-        """Override para sincronizar automáticamente con el sitio web"""
-        result = super(ProductTemplate, self).write(vals)
+        """Override para trazabilidad cuando se modifica manual_stock"""
+        if 'manual_stock' in vals:
+            if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
+                raise UserError(_('Solo los usuarios asociados pueden modificar el stock manualmente.'))
         
-        if 'manual_stock' in vals and vals['manual_stock']:
-            for record in self:
-                if record.is_manual_stock_modified:
-                    record.action_sync_stock_to_website()
-        
-        return result
+        return super().write(vals)
