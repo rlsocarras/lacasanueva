@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!-- ============================================ -->
+    <!-- Vista de formulario de variante (acceso directo) -->
+    <!-- ============================================ -->
     <record id="product_product_form_view_la_casa_nueva" model="ir.ui.view">
         <field name="name">product.product.form.la.casa.nueva</field>
         <field name="model">product.product</field>
@@ -10,7 +13,6 @@
                 <group string="Stock Manual La Casa Nueva (Variante)" 
                        name="manual_stock_variant_group"
                        colspan="4">
-                    
                     <div colspan="4" class="alert alert-info">
                         <i class="fa fa-info-circle"/> 
                         Stock informativo para el sitio web. 
@@ -20,20 +22,13 @@
                     <group colspan="2">
                         <field name="manual_stock" 
                                string="Stock Manual"
-                               placeholder="Ingrese el stock manual"
-                               help="Stock manual de esta variante"/>
+                               placeholder="Ingrese el stock manual"/>
                     </group>
                     
                     <group colspan="2">
-                        <field name="is_manual_stock_modified" 
-                               string="Modificado"
-                               readonly="1"/>
-                        <field name="last_manual_stock_update" 
-                               string="Última Actualización"
-                               readonly="1"/>
-                        <field name="last_manual_stock_user" 
-                               string="Actualizado Por"
-                               readonly="1"/>
+                        <field name="is_manual_stock_modified" readonly="1"/>
+                        <field name="last_manual_stock_update" readonly="1"/>
+                        <field name="last_manual_stock_user" readonly="1"/>
                     </group>
                     
                     <group colspan="4">
@@ -45,6 +40,51 @@
                     </group>
                 </group>
             </xpath>
+        </field>
+    </record>
+
+    <!-- ============================================ -->
+    <!-- Vista de variante desde el TEMPLATE (popup) -->
+    <!-- XML ID CORRECTO: product.product_variant_easy_edit_view -->
+    <!-- ============================================ -->
+    <record id="product_product_variant_easy_edit_view_la_casa_nueva" model="ir.ui.view">
+        <field name="name">product.product.variant.easy.edit.view.la.casa.nueva</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_variant_easy_edit_view"/>
+        <field name="priority" eval="99"/>
+        <field name="arch" type="xml">
+            
+            <!-- Insertar Stock Manual después del barcode (dentro del grupo Codes) -->
+            <xpath expr="//field[@name='barcode']" position="after">
+                <field name="manual_stock" 
+                       string="Stock Manual"
+                       placeholder="Ingrese el stock manual"
+                       help="Stock manual de esta variante. NO afecta al stock real."/>
+            </xpath>
+            
+            <!-- Insertar grupo de trazabilidad al final del sheet -->
+            <xpath expr="//sheet" position="inside">
+                <group name="manual_stock_info" string="Stock Manual La Casa Nueva">
+                    <div colspan="2" class="alert alert-info">
+                        <i class="fa fa-info-circle"/> 
+                        Stock informativo para el sitio web. NO afecta al stock real.
+                    </div>
+                    <group>
+                        <field name="is_manual_stock_modified" 
+                               string="Modificado"
+                               readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="last_manual_stock_update" 
+                               string="Última Actualización"
+                               readonly="1"/>
+                        <field name="last_manual_stock_user" 
+                               string="Actualizado Por"
+                               readonly="1"/>
+                    </group>
+                </group>
+            </xpath>
+            
         </field>
     </record>
 </odoo>
