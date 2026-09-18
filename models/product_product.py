@@ -42,6 +42,23 @@ class ProductProduct(models.Model):
         store=False,
     )
 
+    # Campo para verificar si el usuario actual es asociado
+    is_asociado = fields.Boolean(
+        string='Es Asociado',
+        compute='_compute_is_asociado',
+        store=False,
+        compute_sudo=False,
+    )
+
+    @api.depends_context('uid')
+    def _compute_is_asociado(self):
+        """Verificar si el usuario actual es asociado o admin"""
+        is_asociado = (
+            self.env.user.is_asociado 
+        )
+        for product in self:
+            product.is_asociado = is_asociado
+
     def _compute_is_variant_view(self):
         for product in self:
             product.is_variant_view = True
