@@ -49,6 +49,17 @@ class ProductProduct(models.Model):
         store=False,
         compute_sudo=False,
     )
+    # CRÍTICO: Este campo DEBE existir en product.product
+    stock_display_mode = fields.Selection(
+        selection=[
+            ('real', 'Stock Real'),
+            ('manual', 'Stock Manual'),
+        ],
+        string='Mostrar en Sitio Web',
+        related='product_tmpl_id.stock_display_mode',
+        readonly=True,
+        store=True,
+    )
 
     @api.depends_context('uid')
     def _compute_is_asociado(self):
@@ -121,5 +132,9 @@ class ProductProduct(models.Model):
         if 'manual_stock' in vals:
             for record in self:
                 record._update_website_stock_internal()
+                # ⭐ CAMBIO AUTOMÁTICO A MODO MANUAL
+                record.product_tmpl_id.write({
+                    'stock_display_mode': 'manual',
+                 })
         
         return result

@@ -15,6 +15,13 @@ class ProductTemplate(models.Model):
         inverse='_inverse_manual_stock',
         store=True,
     )
+
+    is_manual_stock_modified = fields.Boolean(
+        string='Modificado Manualmente',
+        default=False,
+        tracking=True,
+        store=True,
+    )
     
     # Campos resumen (siempre readonly)
     manual_stock_summary = fields.Float(
@@ -61,6 +68,20 @@ class ProductTemplate(models.Model):
         compute='_compute_is_asociado',
         store=False,
         compute_sudo=False,
+    )
+    # ============================================
+    # CAMPO: stock_display_mode (selector de stock)
+    # ============================================
+    stock_display_mode = fields.Selection(
+        selection=[
+            ('real', 'Stock Real'),
+            ('manual', 'Stock Manual'),
+        ],
+        string='Mostrar en Sitio Web',
+        default='real',
+        required=True,
+        help='Selecciona qué stock mostrar en el sitio web para este producto',
+        tracking=True,
     )
 
     @api.depends_context('uid')
