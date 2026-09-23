@@ -1,4 +1,3 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_product_template_manual_stock,product.template.manual.stock,product.model_product_template,base.group_user,1,0,0,0
-access_product_product_manual_stock,product.product.manual.stock,product.model_product_product,base.group_user,1,0,0,0
-access_res_users_manual_stock,res.users.manual.stock,base.model_res_users,base.group_user,1,0,0,0
+access_product_product_manual_stock,product.product.manual.stock,product.model_product_product,base.group_user,1,1,0,0
+access_product_template_manual_stock,product.template.manual.stock,product.model_product_template,base.group_user,1,1,0,0

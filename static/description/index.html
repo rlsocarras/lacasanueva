@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>La Casa Nueva - Módulo de Gestión de Stock</title>
+    <title>La Casa Nueva - Módulo de Gestión de Stock Manual</title>
     <style>
         * {
             margin: 0;
@@ -72,7 +72,7 @@
         
         .section {
             margin-bottom: 40px;
-            padding: 20px;
+            padding: 25px;
             background-color: #fafafa;
             border-left: 5px solid #2E86C1;
             border-radius: 5px;
@@ -82,17 +82,19 @@
             color: #2E86C1;
             margin-bottom: 15px;
             font-size: 1.8em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
         }
         
         .section h4 {
             color: #1B4F72;
-            margin-bottom: 10px;
+            margin: 20px 0 10px 0;
             font-size: 1.3em;
         }
         
         .features-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 20px;
             margin: 20px 0;
         }
@@ -111,13 +113,14 @@
         }
         
         .feature-icon {
-            font-size: 3em;
+            font-size: 2.5em;
             margin-bottom: 10px;
         }
         
         .feature-card h4 {
             color: #2E86C1;
             margin-bottom: 10px;
+            margin-top: 0;
         }
         
         .steps {
@@ -129,9 +132,10 @@
         .steps li {
             counter-increment: step-counter;
             margin-bottom: 15px;
-            padding-left: 50px;
+            padding-left: 55px;
             position: relative;
             font-weight: 500;
+            padding-top: 5px;
         }
         
         .steps li::before {
@@ -139,49 +143,60 @@
             background-color: #2E86C1;
             color: white;
             font-weight: bold;
-            width: 35px;
-            height: 35px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             position: absolute;
             left: 0;
-            top: -5px;
+            top: 0;
         }
         
         .alert {
-            padding: 15px;
+            padding: 15px 20px;
             border-radius: 5px;
             margin: 20px 0;
+            border-left: 5px solid;
         }
         
         .alert-info {
             background-color: #d1ecf1;
-            border: 1px solid #bee5eb;
+            border-color: #0c5460;
             color: #0c5460;
         }
         
         .alert-success {
             background-color: #d4edda;
-            border: 1px solid #c3e6cb;
+            border-color: #155724;
             color: #155724;
         }
         
         .alert-warning {
             background-color: #fff3cd;
-            border: 1px solid #ffeeba;
+            border-color: #856404;
             color: #856404;
+        }
+        
+        .alert-danger {
+            background-color: #f8d7da;
+            border-color: #721c24;
+            color: #721c24;
         }
         
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
         }
         
         th, td {
-            padding: 12px;
+            padding: 12px 15px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
@@ -189,10 +204,20 @@
         th {
             background-color: #2E86C1;
             color: white;
+            font-weight: 600;
         }
         
         tr:hover {
             background-color: #f5f5f5;
+        }
+        
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+            color: #c7254e;
+            font-size: 0.9em;
         }
         
         .footer {
@@ -200,6 +225,7 @@
             padding: 20px;
             margin-top: 40px;
             color: #666;
+            border-top: 1px solid #e0e0e0;
         }
         
         .button {
@@ -218,12 +244,33 @@
             background-color: #1B4F72;
         }
         
-        .screenshot {
-            max-width: 100%;
-            height: auto;
+        .permiso-box {
+            background: linear-gradient(135deg, #e8f4f8 0%, #d1ecf1 100%);
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            border: 2px solid #2E86C1;
+            margin: 15px 0;
+        }
+        
+        .permiso-box h4 {
+            color: #1B4F72;
+            margin-top: 0;
+        }
+        
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
             margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .grid-2 {
+                grid-template-columns: 1fr;
+            }
+            .header h1 {
+                font-size: 2em;
+            }
         }
     </style>
 </head>
@@ -233,201 +280,291 @@
         <div class="header">
             <img src="icon.png" alt="La Casa Nueva Logo">
             <h1>🏠 La Casa Nueva</h1>
-            <h2>Módulo de Gestión de Stock Manual para Odoo 18</h2>
+            <h2>Gestión de Stock Manual para Odoo 18</h2>
             <span class="badge">Versión 18.0.1.0.0</span>
             <span class="badge">LGPL-3</span>
-            <span class="badge">Producción</span>
         </div>
         
         <!-- Content -->
         <div class="content">
+            
             <!-- Descripción General -->
             <div class="section">
                 <h3>📋 Descripción General</h3>
                 <p>
-                    <strong>La Casa Nueva</strong> es un módulo completo para Odoo 18 que permite 
-                    la gestión eficiente del stock de productos de manera manual, sin necesidad 
-                    de realizar entradas de almacén complejas. Diseñado específicamente para 
-                    empresas que necesitan un control rápido y directo sobre su inventario.
+                    <strong>La Casa Nueva</strong> es un módulo para Odoo 18 que permite gestionar 
+                    el stock de productos de forma manual, mostrando cantidades personalizadas 
+                    en el sitio web sin afectar el stock real del inventario.
                 </p>
-                
                 <div class="alert alert-info">
-                    <strong>💡 ¿Para quién es este módulo?</strong><br>
-                    Empresas que necesitan actualizar rápidamente el stock de sus productos 
-                    sin procesos administrativos complejos, manteniendo el control y la trazabilidad.
+                    <strong>💡 Idea principal:</strong> El stock manual es <u>informativo</u>. 
+                    No modifica el stock real (<code>qty_available</code>) ni las ubicaciones de inventario.
                 </div>
             </div>
             
-            <!-- Características Principales -->
+            <!-- Características -->
             <div class="section">
                 <h3>✨ Características Principales</h3>
                 <div class="features-grid">
                     <div class="feature-card">
                         <div class="feature-icon">📦</div>
                         <h4>Stock Manual</h4>
-                        <p>Modifica el stock directamente desde la ficha del producto sin crear entradas de almacén.</p>
+                        <p>Modifica el stock informativo sin afectar el stock real del inventario.</p>
                     </div>
-                    
                     <div class="feature-card">
                         <div class="feature-icon">🌐</div>
-                        <h4>Sincronización Web</h4>
-                        <p>El stock modificado se refleja automáticamente en la plantilla del sitio web.</p>
+                        <h4>Badge personalizado en la web</h4>
+                        <p>Muestra un badge bonito con la cantidad disponible en el sitio web.</p>
                     </div>
-                    
                     <div class="feature-card">
-                        <div class="feature-icon">👥</div>
-                        <h4>Control de Acceso</h4>
-                        <p>Solo usuarios marcados como "Asociados" pueden modificar el stock manualmente.</p>
+                        <div class="feature-icon">🔐</div>
+                        <h4>Permisos separados</h4>
+                        <p>Gestión interna y visualización en la web son permisos independientes.</p>
                     </div>
-                    
                     <div class="feature-card">
-                        <div class="feature-icon">📊</div>
-                        <h4>Trazabilidad</h4>
-                        <p>Registro completo de quién modificó el stock y cuándo se realizó el cambio.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">⚡</div>
-                        <h4>Actualización Rápida</h4>
-                        <p>Un solo clic para actualizar todo el stock de un producto y sus variantes.</p>
-                    </div>
-                    
-                    <div class="feature-card">
-                        <div class="feature-icon">🔒</div>
-                        <h4>Seguridad</h4>
-                        <p>Validaciones de permisos y prevención de stock negativo.</p>
+                        <div class="feature-icon">🔄</div>
+                        <h4>Actualización por variante</h4>
+                        <p>El badge se actualiza automáticamente al cambiar de variante.</p>
                     </div>
                 </div>
             </div>
             
-            <!-- Requisitos -->
+            <!-- ⭐ SECCIÓN DE PERMISOS (NUEVA) -->
             <div class="section">
-                <h3>🔧 Requisitos del Sistema</h3>
+                <h3>🔐 Sistema de Permisos</h3>
+                
+                <div class="alert alert-warning">
+                    <strong>⚠️ IMPORTANTE:</strong> El módulo usa <strong>DOS permisos independientes</strong> 
+                    que controlan cosas diferentes. Un usuario puede tener uno, otro, o ambos.
+                </div>
+                
+                <div class="grid-2">
+                    
+                    <!-- Permiso 1 -->
+                    <div class="permiso-box">
+                        <h4>🔧 Permiso 1: Gestionar stock manual</h4>
+                        <p><strong>Tipo:</strong> Grupo de seguridad</p>
+                        <p><strong>Ubicación:</strong> Ajustes → Usuarios → Derechos de acceso → La Casa Nueva</p>
+                        <p><strong>¿Qué permite?</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>✅ Ver la sección <strong>"Stock Manual"</strong> en productos</li>
+                            <li>✅ Modificar <code>manual_stock</code> en variantes</li>
+                            <li>✅ Cambiar <code>stock_display_mode</code> del producto</li>
+                            <li>✅ Sincronizar con el sitio web</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>¿Dónde se usa?</strong></p>
+                        <p><em>Solo en el backend (Odoo interno)</em></p>
+                    </div>
+                    
+                    <!-- Permiso 2 -->
+                    <div class="permiso-box">
+                        <h4>🌐 Permiso 2: Es Asociado</h4>
+                        <p><strong>Tipo:</strong> Campo booleano en el usuario</p>
+                        <p><strong>Ubicación:</strong> Ajustes → Usuarios → Pestaña "Preferencias"</p>
+                        <p><strong>¿Qué permite?</strong></p>
+                        <ul style="margin-left: 20px; margin-top: 10px;">
+                            <li>✅ Ver el <strong>badge bonito</strong> en el sitio web</li>
+                            <li>✅ Ver el stock manual en lugar del stock real</li>
+                        </ul>
+                        <p style="margin-top: 15px;"><strong>¿Dónde se usa?</strong></p>
+                        <p><em>Solo en el frontend (sitio web)</em></p>
+                    </div>
+                </div>
+                
+                <!-- Tabla de combinaciones -->
+                <h4>📊 Combinaciones de permisos</h4>
                 <table>
-                    <tr>
-                        <th>Requisito</th>
-                        <th>Versión</th>
-                        <th>Notas</th>
-                    </tr>
-                    <tr>
-                        <td>Odoo</td>
-                        <td>18.0</td>
-                        <td>Community o Enterprise</td>
-                    </tr>
-                    <tr>
-                        <td>Python</td>
-                        <td>3.10+</td>
-                        <td>Incluido con Odoo 18</td>
-                    </tr>
-                    <tr>
-                        <td>Módulos Dependientes</td>
-                        <td>-</td>
-                        <td>stock, product, website_sale, sale_management</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Usuario</th>
+                            <th>Gestionar Stock</th>
+                            <th>Es Asociado</th>
+                            <th>Puede modificar stock</th>
+                            <th>Ve badge bonito en la web</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Administrador</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                        </tr>
+                        <tr>
+                            <td>Usuario A</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                            <td>✅ Sí</td>
+                        </tr>
+                        <tr>
+                            <td>Usuario B</td>
+                            <td>✅ Sí</td>
+                            <td>❌ No</td>
+                            <td>✅ Sí</td>
+                            <td>❌ No (ve mensaje nativo)</td>
+                        </tr>
+                        <tr>
+                            <td>Usuario C</td>
+                            <td>❌ No</td>
+                            <td>✅ Sí</td>
+                            <td>❌ No</td>
+                            <td>✅ Sí</td>
+                        </tr>
+                        <tr>
+                            <td>Público</td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                            <td>❌ No</td>
+                        </tr>
+                    </tbody>
                 </table>
+                
+                <div class="alert alert-info">
+                    <strong>💡 Nota:</strong> Para que un usuario pueda <u>modificar</u> el stock manual 
+                    necesita el <strong>grupo</strong>. Para que <u>vea el badge bonito</u> en la web 
+                    necesita estar marcado como <strong>Asociado</strong>.
+                </div>
             </div>
             
-            <!-- Instalación -->
+            <!-- ⭐ CÓMO ASIGNAR LOS PERMISOS (NUEVA) -->
             <div class="section">
-                <h3>🚀 Instalación</h3>
+                <h3>👥 Cómo asignar los permisos</h3>
+                
+                <h4>1. Asignar el grupo "Gestionar stock manual"</h4>
                 <ol class="steps">
-                    <li>Copiar la carpeta <code>la_casa_nueva</code> al directorio de addons de Odoo</li>
-                    <li>Reiniciar el servidor de Odoo</li>
-                    <li>Ir a <strong>Aplicaciones</strong> → Actualizar lista de aplicaciones</li>
-                    <li>Buscar <strong>"La Casa Nueva"</strong> en el listado</li>
-                    <li>Hacer clic en <strong>Instalar</strong></li>
+                    <li>Ir a <strong>Ajustes → Usuarios → Usuarios</strong></li>
+                    <li>Seleccionar el usuario</li>
+                    <li>Ir a la pestaña <strong>Derechos de acceso</strong></li>
+                    <li>En la sección <strong>"La Casa Nueva"</strong>, marcar <strong>"Gestionar stock manual"</strong></li>
+                    <li>Guardar</li>
+                </ol>
+                
+                <h4>2. Marcar al usuario como "Asociado"</h4>
+                <ol class="steps">
+                    <li>Ir a <strong>Ajustes → Usuarios → Usuarios</strong></li>
+                    <li>Seleccionar el usuario</li>
+                    <li>Buscar el campo <strong>"Es Asociado"</strong> (pestaña Preferencias)</li>
+                    <li>Activar el checkbox</li>
+                    <li>Guardar</li>
                 </ol>
                 
                 <div class="alert alert-success">
-                    <strong>✅ Instalación Completa</strong><br>
-                    Una vez instalado, el módulo estará listo para configurar y usar.
+                    <strong>✅ Resultado:</strong> Si asignas ambos permisos al usuario, podrá 
+                    <u>modificar el stock manual</u> desde el backend y <u>ver el badge bonito</u> 
+                    en el sitio web.
                 </div>
-            </div>
-            
-            <!-- Configuración -->
-            <div class="section">
-                <h3>⚙️ Configuración</h3>
-                <h4>1. Configurar Usuarios Asociados</h4>
-                <ol class="steps">
-                    <li>Ir a <strong>Ajustes → Usuarios</strong></li>
-                    <li>Seleccionar el usuario que será asociado</li>
-                    <li>Ir a la pestaña <strong>Derechos de acceso</strong></li>
-                    <li>Marcar el checkbox <strong>"Es Asociado"</strong></li>
-                    <li>Guardar los cambios</li>
-                </ol>
-                
-                <h4>2. Configurar Productos</h4>
-                <ol class="steps">
-                    <li>Ir a <strong>Inventario → Productos</strong></li>
-                    <li>Seleccionar un producto</li>
-                    <li>Ir a la pestaña <strong>Inventario</strong></li>
-                    <li>Encontrar la sección <strong>"Stock Manual La Casa Nueva"</strong></li>
-                </ol>
             </div>
             
             <!-- Uso del Módulo -->
             <div class="section">
                 <h3>📖 Uso del Módulo</h3>
-                <h4>Actualización de Stock Manual</h4>
+                
+                <h4>Configurar un producto</h4>
                 <ol class="steps">
-                    <li>Acceder a la ficha del producto como usuario asociado</li>
+                    <li>Ir a <strong>Inventario → Productos → Productos</strong></li>
+                    <li>Abrir un producto</li>
                     <li>Ir a la pestaña <strong>Inventario</strong></li>
-                    <li>Ingresar el nuevo stock en el campo <strong>"Stock Manual"</strong></li>
-                    <li>Hacer clic en <strong>"Actualizar Stock Manual"</strong></li>
-                    <li>Confirmar la actualización</li>
+                    <li>En la sección <strong>"Stock Manual La Casa Nueva"</strong></li>
+                    <li>Seleccionar <strong>"Stock Manual"</strong> en "Mostrar en Sitio Web"</li>
                 </ol>
                 
-                <h4>Sincronización con Sitio Web</h4>
+                <h4>Productos SIN variantes</h4>
                 <ol class="steps">
-                    <li>Después de actualizar el stock</li>
-                    <li>Hacer clic en <strong>"Sincronizar con Sitio Web"</strong></li>
-                    <li>El stock se actualizará automáticamente en la web</li>
+                    <li>Editar el campo <strong>"Stock Manual"</strong> directamente en el producto</li>
+                    <li>Guardar</li>
+                    <li>El sitio web mostrará el badge bonito con el stock manual</li>
+                </ol>
+                
+                <h4>Productos CON variantes</h4>
+                <ol class="steps">
+                    <li>Ir a la pestaña <strong>Variantes</strong> del producto</li>
+                    <li>Hacer clic en una variante</li>
+                    <li>Editar el campo <strong>"Stock Manual"</strong></li>
+                    <li>Guardar (el template cambia automáticamente a modo manual)</li>
+                    <li>El sitio web mostrará el stock manual de la variante seleccionada</li>
                 </ol>
                 
                 <div class="alert alert-warning">
-                    <strong>⚠️ Importante:</strong><br>
-                    Solo los usuarios marcados como "Asociados" o administradores del sistema 
-                    pueden realizar estas operaciones.
+                    <strong>⚠️ Importante:</strong> Al modificar el stock manual de una variante, 
+                    el template del producto <strong>cambia automáticamente</strong> a modo 
+                    <code>manual</code>. Esto hace que el sitio web muestre el stock manual en lugar 
+                    del stock real.
                 </div>
             </div>
             
-            <!-- Funcionalidades Técnicas -->
+            <!-- Apariencia del Badge -->
             <div class="section">
-                <h3>🔬 Funcionalidades Técnicas</h3>
-                <ul>
-                    <li><strong>Campos Relacionados:</strong> El stock manual se sincroniza entre plantilla y variantes</li>
-                    <li><strong>Tracking:</strong> Registro automático de cambios con usuario y fecha</li>
-                    <li><strong>Validaciones:</strong> Prevención de stock negativo y permisos de usuario</li>
-                    <li><strong>Wizard de Stock:</strong> Uso del wizard nativo de Odoo para cambios de stock</li>
-                    <li><strong>Notificaciones:</strong> Mensajes de éxito/error para mejor UX</li>
-                    <li><strong>Integración Web:</strong> Actualización automática de disponibilidad en eCommerce</li>
-                </ul>
+                <h3>🎨 Apariencia del Badge en la Web</h3>
+                <p>El badge cambia de color y mensaje según la cantidad disponible:</p>
+                
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Cantidad</th>
+                            <th>Mensaje</th>
+                            <th>Color</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Más de 10</td>
+                            <td>✅ En stock — X unidades disponibles</td>
+                            <td>🟢 Verde</td>
+                        </tr>
+                        <tr>
+                            <td>1 a 10</td>
+                            <td>🔥 ¡Últimas unidades! — solo X disponibles</td>
+                            <td>🟡 Amarillo</td>
+                        </tr>
+                        <tr>
+                            <td>0</td>
+                            <td>❌ Producto agotado — Consúltanos</td>
+                            <td>🔴 Rojo</td>
+                        </tr>
+                    </tbody>
+                </table>
+                
+                <div class="alert alert-info">
+                    <strong>💡 Nota:</strong> El badge bonito solo se muestra a usuarios 
+                    <strong>Asociados</strong>. Los demás usuarios ven el mensaje nativo de Odoo.
+                </div>
             </div>
             
             <!-- Solución de Problemas -->
             <div class="section">
                 <h3>🛠️ Solución de Problemas</h3>
                 <table>
-                    <tr>
-                        <th>Problema</th>
-                        <th>Solución</th>
-                    </tr>
-                    <tr>
-                        <td>No veo el botón de actualizar stock</td>
-                        <td>Verificar que el usuario esté marcado como "Asociado"</td>
-                    </tr>
-                    <tr>
-                        <td>Error al actualizar stock</td>
-                        <td>Verificar permisos y que el producto tenga ubicación de stock configurada</td>
-                    </tr>
-                    <tr>
-                        <td>El stock no se refleja en la web</td>
-                        <td>Asegurarse de que el producto esté publicado en el sitio web</td>
-                    </tr>
-                    <tr>
-                        <td>Stock negativo no permitido</td>
-                        <td>Esta es una característica de seguridad, no un error</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Problema</th>
+                            <th>Solución</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>No veo la sección "Stock Manual"</td>
+                            <td>Verificar que el usuario tenga el grupo <strong>"Gestionar stock manual"</strong></td>
+                        </tr>
+                        <tr>
+                            <td>No aparece el badge bonito en la web</td>
+                            <td>Verificar: 1) Usuario marcado como <strong>Asociado</strong>, 2) Producto en modo <strong>manual</strong>, 3) Stock manual modificado</td>
+                        </tr>
+                        <tr>
+                            <td>El badge no se actualiza al cambiar de variante</td>
+                            <td>Recargar la página con <strong>Ctrl + F5</strong> y limpiar caché del sitio web</td>
+                        </tr>
+                        <tr>
+                            <td>Sigue apareciendo el mensaje amarillo de Odoo</td>
+                            <td>Limpiar caché del sitio web (Ajustes → Técnico → Website → Limpiar caché)</td>
+                        </tr>
+                        <tr>
+                            <td>El stock manual no se guarda</td>
+                            <td>Verificar que el usuario tenga el grupo <strong>"Gestionar stock manual"</strong></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             
@@ -435,7 +572,7 @@
             <div class="section">
                 <h3>📞 Soporte Técnico</h3>
                 <p>Para soporte técnico y consultas:</p>
-                <ul>
+                <ul style="margin-left: 20px;">
                     <li><strong>Email:</strong> soporte@lacasanueva.com</li>
                     <li><strong>Sitio Web:</strong> www.lacasanueva.com</li>
                     <li><strong>Horario:</strong> Lunes a Viernes, 9:00 - 18:00</li>
@@ -443,24 +580,31 @@
                 
                 <div style="text-align: center; margin-top: 30px;">
                     <a href="mailto:soporte@lacasanueva.com" class="button">📧 Contactar Soporte</a>
-                    <a href="https://www.lacasanueva.com" class="button">🌐 Visitar Sitio Web</a>
                 </div>
             </div>
             
-            <!-- Versiones -->
+            <!-- Historial de Versiones -->
             <div class="section">
                 <h3>📅 Historial de Versiones</h3>
                 <table>
-                    <tr>
-                        <th>Versión</th>
-                        <th>Fecha</th>
-                        <th>Cambios</th>
-                    </tr>
-                    <tr>
-                        <td>18.0.1.0.0</td>
-                        <td>2024</td>
-                        <td>Versión inicial para Odoo 18</td>
-                    </tr>
+                    <thead>
+                        <tr>
+                            <th>Versión</th>
+                            <th>Cambios</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>18.0.1.0.0</td>
+                            <td>
+                                Versión inicial para Odoo 18<br>
+                                • Stock manual por variante<br>
+                                • Badge bonito en el sitio web<br>
+                                • Permisos separados (grupo + asociado)<br>
+                                • Actualización automática por variante
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
             
@@ -468,10 +612,10 @@
             <div class="section">
                 <h3>⚖️ Licencia</h3>
                 <p>
-                    Este módulo está licenciado bajo <strong>LGPL-3</strong> (GNU Lesser General Public License v3.0).
-                    Esto significa que puedes:
+                    Este módulo está licenciado bajo <strong>LGPL-3</strong> 
+                    (GNU Lesser General Public License v3.0). Puedes:
                 </p>
-                <ul>
+                <ul style="margin-left: 20px;">
                     <li>✅ Usar el módulo libremente</li>
                     <li>✅ Modificar el código según tus necesidades</li>
                     <li>✅ Distribuir el módulo modificado</li>
@@ -482,7 +626,7 @@
             <!-- Footer -->
             <div class="footer">
                 <p>
-                    © 2024 La Casa Nueva. Todos los derechos reservados.<br>
+                    © 2026 La Casa Nueva. Todos los derechos reservados.<br>
                     Desarrollado con ❤️ para Odoo 18<br>
                     Versión del módulo: 18.0.1.0.0
                 </p>

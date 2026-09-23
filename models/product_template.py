@@ -82,7 +82,22 @@ class ProductTemplate(models.Model):
         required=True,
         help='Selecciona qué stock mostrar en el sitio web para este producto',
         tracking=True,
+    )  
+    
+    # ✅ Verifica el GRUPO (permiso para modificar en backend)
+    can_manage_manual_stock = fields.Boolean(
+        string='Puede Gestionar Stock Manual',
+        compute='_compute_can_manage_manual_stock',
+        store=False,
+        compute_sudo=False,
     )
+    
+    @api.depends_context('uid')
+    def _compute_can_manage_manual_stock(self):
+        """Usuario con el grupo 'Gestionar stock manual'"""
+        has_group = self.env.user.has_group('lacasanueva.group_gestionar_stock_manual')
+        for template in self:
+            template.can_manage_manual_stock = has_group
 
     @api.depends_context('uid')
     def _compute_is_asociado(self):

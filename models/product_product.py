@@ -60,6 +60,29 @@ class ProductProduct(models.Model):
         readonly=True,
         store=True,
     )
+    
+    # ✅ Verifica el GRUPO
+    can_manage_manual_stock = fields.Boolean(
+        string='Puede Gestionar Stock Manual',
+        compute='_compute_can_manage_manual_stock',
+        store=False,
+        compute_sudo=False,
+    )
+    
+    @api.depends_context('uid')
+    def _compute_can_manage_manual_stock(self):
+        has_group = self.env.user.has_group('lacasanueva.group_gestionar_stock_manual')
+        for product in self:
+            product.can_manage_manual_stock = has_group
+            
+    def _check_user_permission(self):
+        """Verificar que el usuario tenga el grupo para modificar stock"""
+        if not self.env.user.has_group('lacasanueva.group_gestionar_stock_manual'):
+            raise UserError(_(
+                'Solo los usuarios con el permiso "Gestionar stock manual" '
+                'pueden modificar el stock manual.'
+            ))
+        return True        
 
     @api.depends_context('uid')
     def _compute_is_asociado(self):

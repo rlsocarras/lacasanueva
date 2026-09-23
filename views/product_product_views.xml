@@ -13,7 +13,7 @@
                 <group string="Stock Manual La Casa Nueva (Variante)" 
                        name="manual_stock_variant_group"
                        colspan="4"
-                       invisible="not is_asociado">
+                       invisible="not can_manage_manual_stock">
                     <div colspan="4" class="alert alert-info">
                         <i class="fa fa-info-circle"/> 
                         Stock informativo para el sitio web. 
@@ -61,13 +61,13 @@
                        string="Stock Manual"
                        placeholder="Ingrese el stock manual"
                        help="Stock manual de esta variante. NO afecta al stock real."
-                       invisible="not is_asociado"/>
+                       invisible="not can_manage_manual_stock"/>
             </xpath>
             
             <!-- Insertar grupo de trazabilidad al final del sheet -->
             <xpath expr="//sheet" position="inside">
                 <group name="manual_stock_info" string="Stock Manual La Casa Nueva"
-                invisible="not is_asociado">
+                invisible="not can_manage_manual_stock">
                     <div colspan="2" class="alert alert-info">
                         <i class="fa fa-info-circle"/> 
                         Stock informativo para el sitio web. NO afecta al stock real.

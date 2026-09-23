@@ -23,6 +23,7 @@
         'sale_management',
     ],
     'data': [
+        'security/la_casa_nueva_security.xml',  
         'security/ir.model.access.csv',
         'views/res_users_views.xml',
         'views/product_template_views.xml',

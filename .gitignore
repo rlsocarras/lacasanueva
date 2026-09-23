@@ -2,3 +2,4 @@
 *.bat
 scrips
 _pycache_
+*.pyc

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Categoría del módulo -->
+    <record id="module_category_lacasanueva" model="ir.module.category">
+        <field name="name">La Casa Nueva</field>
+        <field name="description">Gestión de stock manual</field>
+        <field name="sequence">100</field>
+    </record>
+
+    <!-- Grupo: Gestionar stock manual -->
+    <record id="group_gestionar_stock_manual" model="res.groups">
+        <field name="name">Gestionar stock manual</field>
+        <field name="category_id" ref="module_category_lacasanueva"/>
+        <field name="comment">Permite modificar el stock manual de los productos</field>
+    </record>
+</odoo>

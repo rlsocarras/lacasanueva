@@ -9,7 +9,7 @@
                 <group string="Stock Manual La Casa Nueva" 
                        name="manual_stock_group"
                        colspan="4"
-                       invisible="is_variant_view or not is_asociado">
+                       invisible="is_variant_view or not can_manage_manual_stock">
                     
                     <!-- SIN VARIANTES -->
                     <div colspan="4" 
