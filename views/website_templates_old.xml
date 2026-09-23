@@ -6,14 +6,15 @@
               priority="99">
         <xpath expr="//div[@id='product_option_block']" position="before">
             
-            <t t-if="product and 
-                     product.is_asociado and 
-                     product.stock_display_mode == 'manual'">
+            <t t-if="product and product.stock_display_mode == 'manual' and 
+         product.is_asociado">
                 
+                <!-- Variante actual (inicial) -->
                 <t t-set="current_variant" 
                    t-value="product_variant if product_variant else product.product_variant_id"/>
                 <t t-set="manual_qty" t-value="current_variant.manual_stock"/>
                 
+                <!-- JSON con datos de TODAS las variantes -->
                 <t t-set="variants_json">
                     <t t-foreach="product.product_variant_ids" t-as="v">
                         <t t-if="not v_first">,</t>
@@ -35,58 +36,67 @@
                         overflow: hidden !important;
                     }
                     
-                    .lcn-stock-container {
-                        margin: 15px 0;
-                    }
-                    
                     .lcn-stock-badge {
                         display: inline-flex;
                         align-items: center;
-                        gap: 10px;
-                        padding: 10px 18px;
-                        border-radius: 8px;
-                        font-size: 0.95rem;
-                        font-weight: 500;
-                        border: 1px solid;
-                        transition: all 0.2s ease;
+                        gap: 12px;
+                        padding: 16px 26px;
+                        border-radius: 50px;
+                        font-weight: 600;
+                        font-size: 1.1rem;
+                        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+                        transition: all 0.3s ease;
+                        margin: 15px 0;
+                        border: 2px solid transparent;
+                    }
+                    
+                    .lcn-stock-badge:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
                     }
                     
                     .lcn-stock-badge.lcn-in-stock {
-                        background-color: #d1e7dd;
-                        border-color: #a3cfbb;
-                        color: #0a3622;
-                    }
-                    .lcn-stock-badge.lcn-in-stock .lcn-icon {
-                        color: #198754;
+                        background: linear-gradient(135deg, #d4edda 0%, #c3e6cb 100%);
+                        color: #155724;
+                        border-color: #28a745;
                     }
                     
                     .lcn-stock-badge.lcn-low-stock {
-                        background-color: #fff3cd;
-                        border-color: #ffe69c;
-                        color: #664d03;
-                    }
-                    .lcn-stock-badge.lcn-low-stock .lcn-icon {
-                        color: #cc9a06;
+                        background: linear-gradient(135deg, #fff3cd 0%, #ffeeba 100%);
+                        color: #856404;
+                        border-color: #ffc107;
                     }
                     
                     .lcn-stock-badge.lcn-out-of-stock {
-                        background-color: #f8d7da;
-                        border-color: #f1aeb5;
-                        color: #58151c;
-                    }
-                    .lcn-stock-badge.lcn-out-of-stock .lcn-icon {
-                        color: #dc3545;
+                        background: linear-gradient(135deg, #f8d7da 0%, #f5c6cb 100%);
+                        color: #721c24;
+                        border-color: #dc3545;
                     }
                     
                     .lcn-stock-badge .lcn-icon {
-                        font-size: 1.1rem;
+                        font-size: 1.5rem;
                         display: flex;
                         align-items: center;
                     }
                     
                     .lcn-stock-badge .lcn-quantity {
-                        font-weight: 700;
-                        font-size: 1.05rem;
+                        font-size: 1.4rem;
+                        font-weight: 800;
+                        margin: 0 6px;
+                    }
+                    
+                    .lcn-stock-badge .lcn-pulse {
+                        width: 10px;
+                        height: 10px;
+                        border-radius: 50%;
+                        background-color: currentColor;
+                        animation: lcn-pulse-animation 2s infinite;
+                    }
+                    
+                    @keyframes lcn-pulse-animation {
+                        0% { opacity: 1; transform: scale(1); }
+                        50% { opacity: 0.5; transform: scale(1.3); }
+                        100% { opacity: 1; transform: scale(1); }
                     }
                 </style>
                 
@@ -94,44 +104,36 @@
                      id="lcn-stock-container"
                      t-att-data-variants="'[' + variants_json + ']'">
                     
+                    <!-- Badge inicial (se reemplaza por JS) -->
                     <div t-if="manual_qty &gt; 10"
                          class="lcn-stock-badge lcn-in-stock">
                         <span class="lcn-icon"><i class="fa fa-check-circle"></i></span>
-                        <span>
+                        <span class="lcn-pulse"></span>
+                        <span class="lcn-text">
                             <strong>En stock</strong> — 
-                            <span class="lcn-quantity"><t t-out="int(manual_qty)"/></span>
+                            <span class="lcn-quantity"><t t-esc="int(manual_qty)"/></span>
                             unidades disponibles
                         </span>
                     </div>
                     <div t-elif="manual_qty &gt; 0"
                          class="lcn-stock-badge lcn-low-stock">
                         <span class="lcn-icon"><i class="fa fa-fire"></i></span>
-                        <span>
+                        <span class="lcn-pulse"></span>
+                        <span class="lcn-text">
                             <strong>¡Últimas unidades!</strong> — 
-                            solo <span class="lcn-quantity"><t t-out="int(manual_qty)"/></span>
-                            disponibles
+                            solo <span class="lcn-quantity"><t t-esc="int(manual_qty)"/></span>
+                            disponible<t t-if="manual_qty != 1">s</t>
                         </span>
                     </div>
                     <div t-else=""
                          class="lcn-stock-badge lcn-out-of-stock">
                         <span class="lcn-icon"><i class="fa fa-times-circle"></i></span>
-                        <span>
+                        <span class="lcn-text">
                             <strong>Producto agotado</strong> — 
                             Consúltanos por disponibilidad
                         </span>
                     </div>
                 </div>
-                
-                <div id="lcn-translations" 
-                     style="display:none;"
-                     t-att-data-in-stock="'En stock'"
-                     t-att-data-in-stock-plural="'unidades disponibles'"
-                     t-att-data-low-stock-title="'¡Últimas unidades!'"
-                     t-att-data-low-stock-plural="'disponibles'"
-                     t-att-data-low-stock-singular="'disponible'"
-                     t-att-data-out-of-stock="'Producto agotado'"
-                     t-att-data-out-of-stock-subtitle="'Consúltanos por disponibilidad'"
-                     t-att-data-only="'solo'"/>
                 
                 <script type="text/javascript">
                     //<![CDATA[
@@ -140,7 +142,6 @@
                         
                         var container = null;
                         var variantsData = [];
-                        var translations = {};
                         
                         function init() {
                             container = document.getElementById('lcn-stock-container');
@@ -155,26 +156,8 @@
                                 }
                             }
                             
-                            var transEl = document.getElementById('lcn-translations');
-                            if (transEl) {
-                                translations = {
-                                    in_stock: transEl.getAttribute('data-in-stock') || 'En stock',
-                                    in_stock_plural: transEl.getAttribute('data-in-stock-plural') || 'unidades disponibles',
-                                    low_stock_title: transEl.getAttribute('data-low-stock-title') || '¡Últimas unidades!',
-                                    low_stock_plural: transEl.getAttribute('data-low-stock-plural') || 'disponibles',
-                                    low_stock_singular: transEl.getAttribute('data-low-stock-singular') || 'disponible',
-                                    out_of_stock: transEl.getAttribute('data-out-of-stock') || 'Producto agotado',
-                                    out_of_stock_subtitle: transEl.getAttribute('data-out-of-stock-subtitle') || 'Consúltanos por disponibilidad',
-                                    only: transEl.getAttribute('data-only') || 'solo'
-                                };
-                            }
-                            
                             actualizarBadge();
                             eliminarMensajeAmarillo();
-                        }
-                        
-                        function t(key, fallback) {
-                            return translations[key] || fallback;
                         }
                         
                         function renderBadge(qty) {
@@ -182,36 +165,46 @@
                             if (qty > 10) {
                                 html = '<div class="lcn-stock-badge lcn-in-stock">' +
                                     '<span class="lcn-icon"><i class="fa fa-check-circle"></i></span>' +
-                                    '<span><strong>' + t('in_stock', 'En stock') + '</strong> — ' +
-                                    '<span class="lcn-quantity">' + Math.floor(qty) + '</span> ' +
-                                    t('in_stock_plural', 'unidades disponibles') +
-                                    '</span></div>';
+                                    '<span class="lcn-pulse"></span>' +
+                                    '<span class="lcn-text"><strong>En stock</strong> — ' +
+                                    '<span class="lcn-quantity">' + Math.floor(qty) + '</span> unidades disponibles</span>' +
+                                    '</div>';
                             } else if (qty > 0) {
-                                var p = qty !== 1 ? t('low_stock_plural', 'disponibles') : t('low_stock_singular', 'disponible');
+                                var p = qty !== 1 ? 's' : '';
                                 html = '<div class="lcn-stock-badge lcn-low-stock">' +
                                     '<span class="lcn-icon"><i class="fa fa-fire"></i></span>' +
-                                    '<span><strong>' + t('low_stock_title', '¡Últimas unidades!') + '</strong> — ' +
-                                    t('only', 'solo') + ' <span class="lcn-quantity">' + Math.floor(qty) + '</span> ' + p +
-                                    '</span></div>';
+                                    '<span class="lcn-pulse"></span>' +
+                                    '<span class="lcn-text"><strong>¡Últimas unidades!</strong> — ' +
+                                    'solo <span class="lcn-quantity">' + Math.floor(qty) + '</span> disponible' + p + '</span>' +
+                                    '</div>';
                             } else {
                                 html = '<div class="lcn-stock-badge lcn-out-of-stock">' +
                                     '<span class="lcn-icon"><i class="fa fa-times-circle"></i></span>' +
-                                    '<span><strong>' + t('out_of_stock', 'Producto agotado') + '</strong> — ' +
-                                    t('out_of_stock_subtitle', 'Consúltanos por disponibilidad') +
-                                    '</span></div>';
+                                    '<span class="lcn-text"><strong>Producto agotado</strong> — ' +
+                                    'Consúltanos por disponibilidad</span>' +
+                                    '</div>';
                             }
                             return html;
                         }
                         
                         function getCurrentVariantId() {
+                            // Buscar el input del product_id de Odoo
                             var input = document.querySelector('input[name="product_id"]');
                             if (input && input.value) return parseInt(input.value);
                             
+                            // Buscar en el JS de Odoo
                             var productIdInput = document.querySelector('.js_product input[name="product_id"]');
                             if (productIdInput && productIdInput.value) return parseInt(productIdInput.value);
                             
+                            // Buscar en el data attribute
                             var productEl = document.querySelector('[data-product-id]');
                             if (productEl) return parseInt(productEl.getAttribute('data-product-id'));
+                            
+                            // Fallback: buscar por la combinación actual
+                            var combination = document.querySelector('.js_product');
+                            if (combination && combination.dataset && combination.dataset.productId) {
+                                return parseInt(combination.dataset.productId);
+                            }
                             
                             return null;
                         }
@@ -229,6 +222,7 @@
                                 }
                             }
                             
+                            // Si no se encuentra, usar la primera
                             if (!variant && variantsData.length > 0) {
                                 variant = variantsData[0];
                             }
@@ -250,17 +244,20 @@
                             sels.forEach(function(s) {
                                 document.querySelectorAll(s).forEach(function(el) {
                                     if (el.closest('.lcn-stock-container')) return;
+                                    if (el.classList.contains('lcn-stock-badge')) return;
                                     el.remove();
                                 });
                             });
                         }
                         
+                        // Ejecutar al cargar
                         if (document.readyState === 'loading') {
                             document.addEventListener('DOMContentLoaded', init);
                         } else {
                             init();
                         }
                         
+                        // Escuchar cambios en inputs (variantes)
                         document.addEventListener('change', function(e) {
                             if (e.target.matches('input, select')) {
                                 setTimeout(actualizarBadge, 50);
@@ -269,6 +266,7 @@
                             }
                         });
                         
+                        // Escuchar clics en las variantes
                         document.addEventListener('click', function(e) {
                             if (e.target.closest('.js_product, .form-check, .variant-attribute, [data-attribute]')) {
                                 setTimeout(actualizarBadge, 50);
@@ -277,6 +275,7 @@
                             }
                         });
                         
+                        // MutationObserver: detecta cuando Odoo regenera el mensaje
                         if (document.body) {
                             var observer = new MutationObserver(function(mutations) {
                                 var cambio = false;
@@ -297,6 +296,7 @@
                             observer.observe(document.body, { childList: true, subtree: true });
                         }
                         
+                        // Respaldos
                         setTimeout(init, 300);
                         setTimeout(actualizarBadge, 600);
                         setTimeout(actualizarBadge, 1000);

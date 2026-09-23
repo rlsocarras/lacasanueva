@@ -1,0 +1,57 @@
+# Translation of Odoo Server.
+# This file contains the translation of the following modules:
+# 	* lacasanueva
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Odoo Server 18.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-09-22 00:00+0000\n"
+"PO-Revision-Date: 2026-09-22 00:00+0000\n"
+"Last-Translator: La Casa Nueva <soporte@lacasanueva.com>\n"
+"Language-Team: Spanish\n"
+"Language: es\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "En stock"
+msgstr "En stock"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "unidades disponibles"
+msgstr "unidades disponibles"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "¡Últimas unidades!"
+msgstr "¡Últimas unidades!"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "disponibles"
+msgstr "disponibles"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "disponible"
+msgstr "disponible"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "Producto agotado"
+msgstr "Producto agotado"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "Consúltanos por disponibilidad"
+msgstr "Consúltanos por disponibilidad"
+
+#. module: lacasanueva
+#: code:addons/lacasanueva/views/website_templates.xml:0
+msgid "solo"
+msgstr "solo"
