@@ -1,5 +1,6 @@
 
 *.bat
 scrips
-_pycache_
+scripts
+__pycache__/
 *.pyc

@@ -21,6 +21,9 @@
         'website_sale',
         'website_sale_stock',
         'sale_management',
+        #dashboard
+        'account', 
+        
     ],
     'data': [
         'security/la_casa_nueva_security.xml',  
@@ -29,7 +32,15 @@
         'views/product_template_views.xml',
         'views/product_product_views.xml',
         'views/website_templates.xml',
+        #dashboard
+        'views/finance_balance_views.xml',
     ],
+    'assets': {
+        'web.assets_backend': [
+            'lacasanueva/static/src/js/finance_balance.js',
+            'lacasanueva/static/src/xml/finance_balance.xml',
+        ],
+    },
     'demo': [],
     'images': [
         'static/description/icon.png',
@@ -37,8 +48,6 @@
     'installable': True,
     'application': True,
     'auto_install': False,
-    'license': 'LGPL-3',
-    'assets': {
-        'web.assets_backend': [],
-    },
+    'license': 'LGPL-3'
+    
 }

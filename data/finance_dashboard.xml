@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- 
+            NOTA: NO creamos un grupo nuevo.
+            Usamos el grupo "Finanzas" que ya existe.
+            Solo creamos el tablero dentro de ese grupo.
+        -->
+        
+        <!-- Buscar el grupo Finanzas existente -->
+        <!-- En Odoo 18, el grupo se crea automáticamente con spreadsheet_dashboard_account -->
+        
+        <!-- Tablero: Balance Ventas vs Compras -->
+        <record id="dashboard_finance_balance" model="spreadsheet.dashboard">
+            <field name="name">Balance Ventas vs Compras</field>
+            <field name="dashboard_group_id" ref="spreadsheet_dashboard_account.dashboard_group_finance"/>
+            <field name="sequence">10</field>
+            <field name="is_published">True</field>
+            <field name="group_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>
