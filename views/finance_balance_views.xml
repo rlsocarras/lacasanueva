@@ -8,19 +8,19 @@
     </record>
 
     <!-- 
-        Menú raíz: Reportes La Casa Nueva
+        Menú raíz: La Casa Nueva
         - Aparece en el menú principal de aplicaciones
         - Usa el icono del módulo
     -->
-    <menuitem id="menu_reportes_lacasanueva_root"
-              name="Reportes La Casa Nueva"
+    <menuitem id="menu_lacasanueva_root"
+              name="La Casa Nueva"
               web_icon="lacasanueva,static/description/icon.png"
               sequence="95"/>
 
-    <!-- Submenú: Balance de Compras y Ventas -->
+    <!-- Submenú: Reportes -->
     <menuitem id="menu_finance_balance"
-              name="Balance de Compras y Ventas"
-              parent="menu_reportes_lacasanueva_root"
+              name="Reportes"
+              parent="menu_lacasanueva_root"
               action="action_finance_balance"
               sequence="10"/>
 </odoo>

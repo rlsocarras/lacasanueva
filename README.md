@@ -107,7 +107,7 @@ text
 D. Dashboard Financiero "Balance de Compras y Ventas"
 text
 
-📍 Ubicación: Menú principal "Reportes La Casa Nueva" → "Balance de Compras y Ventas"
+📍 Ubicación: Menú principal "La Casa Nueva" → "Reportes"
 ✅ Qué ver:
    - Panel de control superior al estilo de los tableros de Odoo 18 (título en miga de pan, filtros y botón "Compartir")
    - Filtros horizontales en el panel de control, al estilo de Odoo 18
@@ -165,7 +165,7 @@ Los tests (tests/test_finance_balance.py) verifican:
 
 ## Pruebas manuales (gráficos)
 
-1. Ir a "Reportes La Casa Nueva" → "Balance de Compras y Ventas"
+1. Ir a "La Casa Nueva" → "Reportes"
 2. Verificar:
 ✅ El gráfico de barras muestra 3 barras: Ventas (azul), Compras (rosado) y
    Ganancia/Pérdida (verde suave si hay ganancia, coral suave si hay pérdida)
