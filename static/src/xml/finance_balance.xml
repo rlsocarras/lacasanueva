@@ -36,6 +36,7 @@
                     <t t-if="state.filterType === 'year' or state.filterType === 'month' or state.filterType === 'quarter'">
                         <div class="o-filter-value d-flex align-items-center">
                             <input type="number"
+                                   t-on-change="onApplyFilter"
                                    t-model="state.year"
                                    class="form-control o_input"
                                    style="width: 120px;"
@@ -46,7 +47,7 @@
 
                     <t t-if="state.filterType === 'month'">
                         <div class="o-filter-value d-flex align-items-center">
-                            <select t-model="state.month" class="form-select o_input" style="width: 150px;">
+                            <select t-on-change="onApplyFilter" t-model="state.month" class="form-select o_input" style="width: 150px;">
                                 <option value="1">Enero</option>
                                 <option value="2">Febrero</option>
                                 <option value="3">Marzo</option>
@@ -65,7 +66,7 @@
 
                     <t t-if="state.filterType === 'quarter'">
                         <div class="o-filter-value d-flex align-items-center">
-                            <select t-model="state.quarter" class="form-select o_input" style="width: 150px;">
+                            <select t-on-change="onApplyFilter" t-model="state.quarter" class="form-select o_input" style="width: 150px;">
                                 <option value="1">1° Trimestre</option>
                                 <option value="2">2° Trimestre</option>
                                 <option value="3">3° Trimestre</option>
@@ -76,23 +77,19 @@
 
                     <t t-if="state.filterType === 'range'">
                         <div class="o-filter-value d-flex align-items-center">
-                            <input type="date" t-model="state.dateFrom" class="form-control o_input" style="width: 180px;"/>
+                            <input type="date" t-on-change="onApplyFilter" t-model="state.dateFrom" class="form-control o_input" style="width: 180px;"/>
                         </div>
                         <span class="align-self-center">hasta</span>
                         <div class="o-filter-value d-flex align-items-center">
-                            <input type="date" t-model="state.dateTo" class="form-control o_input" style="width: 180px;"/>
+                            <input type="date" t-on-change="onApplyFilter" t-model="state.dateTo" class="form-control o_input" style="width: 180px;"/>
                         </div>
                     </t>
 
                     <t t-if="state.filterType === 'specific'">
                         <div class="o-filter-value d-flex align-items-center">
-                            <input type="date" t-model="state.specificDate" class="form-control o_input" style="width: 180px;"/>
+                            <input type="date" t-on-change="onApplyFilter" t-model="state.specificDate" class="form-control o_input" style="width: 180px;"/>
                         </div>
                     </t>
-
-                    <button class="btn btn-primary" t-on-click="onApplyFilter">
-                        <i class="fa fa-search me-1"/> Consultar
-                    </button>
                 </div>
 
                 <div class="o_control_panel_actions d-flex align-items-center order-1 order-lg-2">
