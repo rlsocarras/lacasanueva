@@ -90,9 +90,16 @@
                     }
                 </style>
                 
-                <div class="lcn-stock-container text-center" 
-                     id="lcn-stock-container"
-                     t-att-data-variants="'[' + variants_json + ']'">
+<div class="lcn-stock-container text-center" 
+                             id="lcn-stock-container"
+                             t-att-data-variants="'[' + variants_json + ']'">
+                            
+                            <div id="lcn-stock-placeholder" class="text-center py-3" style="display:none;">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando...</span>
+                                </div>
+                                <p class="mt-2 text-muted small">Actualizando stock...</p>
+                            </div>
                     
                     <div t-if="manual_qty &gt; 10"
                          class="lcn-stock-badge lcn-in-stock">
@@ -205,36 +212,67 @@
                         
                         function getCurrentVariantId() {
                             var input = document.querySelector('input[name="product_id"]');
-                            if (input && input.value) return parseInt(input.value);
+                            if (input && input.value && parseInt(input.value) > 0) return parseInt(input.value);
                             
                             var productIdInput = document.querySelector('.js_product input[name="product_id"]');
-                            if (productIdInput && productIdInput.value) return parseInt(productIdInput.value);
+                            if (productIdInput && productIdInput.value && parseInt(productIdInput.value) > 0) return parseInt(productIdInput.value);
                             
                             var productEl = document.querySelector('[data-product-id]');
                             if (productEl) return parseInt(productEl.getAttribute('data-product-id'));
                             
-                            return null;
-                        }
-                        
-                        function actualizarBadge() {
-                            if (!container) return;
-                            
-                            var variantId = getCurrentVariantId();
-                            var variant = null;
-                            
-                            for (var i = 0; i < variantsData.length; i++) {
-                                if (variantsData[i].id === variantId) {
-                                    variant = variantsData[i];
-                                    break;
+                            // Try to get from Odoo's public API if available
+                            if (window.publicWidget && window.publicWidget.registry) {
+                                var variantSelector = window.publicWidget.registry.VariantMixin;
+                                if (variantSelector && variantSelector.currentProductId) {
+                                    return variantSelector.currentProductId;
                                 }
                             }
                             
+                            return null;
+                        }
+                        
+                        function actualizarBadge(reintentos) {
+                            if (!container) return;
+                            
+                            var placeholder = document.getElementById('lcn-stock-placeholder');
+                            var variantId = getCurrentVariantId();
+                            var variant = null;
+                            
+                            // Si tenemos ID de variante, buscar en los datos
+                            if (variantId) {
+                                for (var i = 0; i < variantsData.length; i++) {
+                                    if (variantsData[i].id === variantId) {
+                                        variant = variantsData[i];
+                                        break;
+                                    }
+                                }
+                            }
+                            
+                            // Si no hay variante detectada y tenemos reintentos disponibles
+                            if (!variant && (reintentos === undefined || reintentos > 0)) {
+                                // Mostrar placeholder de carga
+                                if (placeholder) {
+                                    container.querySelectorAll('.lcn-stock-badge').forEach(function(el) { el.style.display = 'none'; });
+                                    placeholder.style.display = 'block';
+                                }
+                                
+                                var siguienteIntento = (reintentos === undefined) ? 10 : reintentos - 1;
+                                setTimeout(function() { actualizarBadge(siguienteIntento); }, 100);
+                                return;
+                            }
+                            
+                            // Ocultar placeholder
+                            if (placeholder) placeholder.style.display = 'none';
+                            
+                            // Fallback solo si no hay reintentos y tenemos datos
                             if (!variant && variantsData.length > 0) {
                                 variant = variantsData[0];
                             }
                             
                             var qty = variant ? (variant.modified ? variant.qty : 0) : 0;
                             container.innerHTML = renderBadge(qty);
+                            // Re-agregar placeholder al DOM para próximos cambios
+                            if (placeholder) container.appendChild(placeholder);
                             eliminarMensajeAmarillo();
                         }
                         
@@ -261,12 +299,21 @@
                             init();
                         }
                         
+                        // Iniciar actualización con reintentos tras carga completa
+                        setTimeout(function() { actualizarBadge(15); }, 300);
+                        
                         document.addEventListener('change', function(e) {
                             if (e.target.matches('input, select')) {
                                 setTimeout(actualizarBadge, 50);
                                 setTimeout(actualizarBadge, 200);
                                 setTimeout(actualizarBadge, 500);
                             }
+                        });
+                        
+                        // Escuchar eventos nativos de Odoo para cambio de variante
+                        document.addEventListener('product_variant_change', function(e) {
+                            setTimeout(actualizarBadge, 50);
+                            setTimeout(actualizarBadge, 200);
                         });
                         
                         document.addEventListener('click', function(e) {
@@ -298,8 +345,6 @@
                         }
                         
                         setTimeout(init, 300);
-                        setTimeout(actualizarBadge, 600);
-                        setTimeout(actualizarBadge, 1000);
                         
                     })();
                     //]]>
