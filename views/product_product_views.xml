@@ -91,6 +91,9 @@
         </field>
     </record>
 
+    <!-- ============================================ -->
+    <!-- Stock Manual visible para TODOS en lista y kanban de variantes -->
+    <!-- ============================================ -->
     <record id="view_product_product_tree_manual_stock" model="ir.ui.view">
         <field name="name">product.product.tree.manual_stock</field>
         <field name="model">product.product</field>
@@ -110,7 +113,6 @@
         <field name="arch" type="xml">
             <xpath expr="//field[@name='color']" position="after">
                 <field name="qty_available" invisible="1"/>
-                <field name="can_manage_manual_stock" invisible="1"/>
                 <field name="manual_stock" invisible="1"/>
             </xpath>
             <xpath expr="//t[@t-name='card']/main" position="inside">
@@ -125,4 +127,5 @@
             </xpath>
         </field>
     </record>
+
 </odoo>
