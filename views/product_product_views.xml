@@ -90,4 +90,42 @@
             
         </field>
     </record>
+
+    <!-- ============================================ -->
+    <!-- Stock Manual visible para TODOS en lista y kanban de variantes -->
+    <!-- ============================================ -->
+    <record id="view_product_product_tree_manual_stock" model="ir.ui.view">
+        <field name="name">product.product.tree.manual_stock</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_product_tree_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='default_code']" position="after">
+                <field name="manual_stock" widget="number_increment" string="Stock Manual"
+                       readonly="not can_manage_manual_stock"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="view_product_product_kanban_manual_stock" model="ir.ui.view">
+        <field name="name">product.product.kanban.manual_stock</field>
+        <field name="model">product.product</field>
+        <field name="inherit_id" ref="product.product_kanban_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='color']" position="after">
+                <field name="qty_available" invisible="1"/>
+                <field name="manual_stock" invisible="1"/>
+            </xpath>
+            <xpath expr="//t[@t-name='card']/main" position="inside">
+                <div class="d-flex mb-1 small">
+                    <span class="fw-medium me-1">Stock real:</span>
+                    <field name="qty_available" readonly="1"/>
+                </div>
+                <div name="manual_stock_line" class="d-flex mb-1 small">
+                    <span class="fw-medium me-1">Stock Manual:</span>
+                    <field name="manual_stock" readonly="1"/>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
 </odoo>

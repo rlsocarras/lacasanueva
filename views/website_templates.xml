@@ -148,6 +148,7 @@
                         var container = null;
                         var variantsData = [];
                         var translations = {};
+                        var lastConfirmedVariantId = null;
                         
                         function init() {
                             container = document.getElementById('lcn-stock-container');
@@ -248,6 +249,15 @@
                                 }
                             }
                             
+                            // RACE: si la variante coincide con la ultima pintada, el input
+                            // todavia puede tener el valor anterior. Reintentar hasta confirmar.
+                            if (variant && variant.id === lastConfirmedVariantId &&
+                                (reintentos === undefined || reintentos > 0)) {
+                                var siguienteIntento = (reintentos === undefined) ? 6 : reintentos - 1;
+                                setTimeout(function () { actualizarBadge(siguienteIntento); }, 100);
+                                return;
+                            }
+                            
                             // Si no hay variante detectada y tenemos reintentos disponibles
                             if (!variant && (reintentos === undefined || reintentos > 0)) {
                                 // Mostrar placeholder de carga
@@ -270,6 +280,7 @@
                             }
                             
                             var qty = variant ? (variant.modified ? variant.qty : 0) : 0;
+                            if (variant) lastConfirmedVariantId = variant.id;
                             container.innerHTML = renderBadge(qty);
                             // Re-agregar placeholder al DOM para próximos cambios
                             if (placeholder) container.appendChild(placeholder);
