@@ -12,8 +12,7 @@
             <xpath expr="//page[@name='inventory']" position="inside">
                 <group string="Stock Manual La Casa Nueva (Variante)" 
                        name="manual_stock_variant_group"
-                       colspan="4"
-                       invisible="not can_manage_manual_stock">
+                       colspan="4">
                     <div colspan="4" class="alert alert-info">
                         <i class="fa fa-info-circle"/> 
                         Stock informativo para el sitio web. 
@@ -23,7 +22,8 @@
                     <group colspan="2">
                         <field name="manual_stock" 
                                string="Stock Manual"
-                               placeholder="Ingrese el stock manual"/>
+                               placeholder="Ingrese el stock manual"
+                               readonly="not can_manage_manual_stock"/>
                     </group>
                     
                     <group colspan="2">

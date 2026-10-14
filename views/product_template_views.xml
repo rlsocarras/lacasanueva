@@ -9,7 +9,7 @@
                 <group string="Stock Manual La Casa Nueva" 
                        name="manual_stock_group"
                        colspan="4"
-                       invisible="is_variant_view or not can_manage_manual_stock">
+                       invisible="is_variant_view">
                     
                     <!-- SIN VARIANTES -->
                     <div colspan="4" 
@@ -23,7 +23,8 @@
                         <field name="manual_stock" 
                                string="Stock Manual"
                                placeholder="Ingrese el stock manual"
-                               help="Stock manual. NO afecta al stock real."/>
+                               help="Stock manual. NO afecta al stock real."
+                               readonly="not can_manage_manual_stock"/>
                     </group>
                     
                     <!-- CON VARIANTES -->
@@ -59,6 +60,7 @@
                                 type="object" 
                                 string="Sincronizar con Sitio Web"
                                 class="btn-secondary"
+                                invisible="not can_manage_manual_stock"
                                 icon="fa-globe"/>
                     </group>
                 </group>
@@ -73,8 +75,7 @@
         <field name="arch" type="xml">
             <xpath expr="//list" position="inside">
                 <field name="manual_stock_summary" 
-                       string="Stock Manual Total"
-                       optional="show"/>
+                       string="Stock Manual Total"/>
             </xpath>
         </field>
     </record>
