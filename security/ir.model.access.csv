@@ -1,3 +1,7 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 access_product_product_manual_stock,product.product.manual.stock,product.model_product_product,base.group_user,1,1,0,0
 access_product_template_manual_stock,product.template.manual.stock,product.model_product_template,base.group_user,1,1,0,0
+access_manual_stock_import_log,manual.stock.import.log,model_manual_stock_import_log,lacasanueva.group_gestionar_stock_manual,1,1,1,1,
+access_manual_stock_import_log_line,manual.stock.import.log.line,model_manual_stock_import_log_line,lacasanueva.group_gestionar_stock_manual,1,1,1,1,
+access_import_manual_stock_wizard,import.manual.stock.wizard,model_import_manual_stock_wizard,lacasanueva.group_gestionar_stock_manual,1,1,1,1,
+access_import_manual_stock_wizard_line,import.manual.stock.wizard.line,model_import_manual_stock_wizard_line,lacasanueva.group_gestionar_stock_manual,1,0,1,0,

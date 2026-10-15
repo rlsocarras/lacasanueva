@@ -16,6 +16,7 @@
     'website': 'https://www.lacasanueva.com',
     'depends': [
         'base',
+        'mail',
         'stock',
         'product',
         'website_sale',
@@ -29,6 +30,8 @@
         'views/product_template_views.xml',
         'views/product_product_views.xml',
         'views/website_templates.xml',
+        'wizard/import_manual_stock_wizard_views.xml',
+        'views/manual_stock_import_log_views.xml',
     ],
     'demo': [],
     'images': [

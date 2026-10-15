@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_import_manual_stock_wizard_form" model="ir.ui.view">
+        <field name="name">import.manual.stock.wizard.form</field>
+        <field name="model">import.manual.stock.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Importar Stock Manual" target="new">
+                <header>
+                    <button name="action_preview" type="object" string="Previsualizar" icon="fa-eye" invisible="state != 'draft'"/>
+                    <button name="action_import" type="object" string="Importar" icon="fa-upload" invisible="state != 'preview'"/>
+                    <button name="action_reset" type="object" string="Reiniciar" icon="fa-redo" invisible="state == 'draft'"/>
+                    <button name="action_download_template" type="object" string="Plantilla CSV" icon="fa-download" invisible="state != 'draft'"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group invisible="state != 'draft'">
+                        <group>
+                            <field name="file_data" filename="file_name" widget="binary"/>
+                            <field name="file_format"/>
+                            <field name="delimiter" invisible="file_format == 'xlsx'"/>
+                            <field name="has_header" invisible="file_format == 'xlsx'"/>
+                            <field name="key_field"/>
+                            <field name="stock_field"/>
+                            <field name="import_mode"/>
+                        </group>
+                        <div class="alert alert-info mt-2">
+                            <i class="fa fa-info-circle"/>
+                            Use la referencia interna (default_code) como campo clave. Máximo 500 líneas por importación. No afecta el stock real.
+                        </div>
+                    </group>
+                    <div invisible="state != 'preview'">
+                        <group>
+                            <field name="total_lines" readonly="1"/>
+                            <field name="valid_lines" readonly="1"/>
+                            <field name="invalid_lines" readonly="1"/>
+                        </group>
+                        <field name="line_ids" string="Líneas de productos">
+                            <list>
+                                <field name="line_number" readonly="1"/>
+                                <field name="key_value" readonly="1"/>
+                                <field name="product_id" readonly="1"/>
+                                <field name="current_stock" readonly="1" widget="float"/>
+                                <field name="new_stock" readonly="1" widget="float"/>
+                                <field name="difference" readonly="1" widget="float"/>
+                                <field name="status" readonly="1" decoration-success="status == 'valid'" decoration-warning="status == 'not_found'" decoration-danger="status == 'error'"/>
+                                <field name="notes" readonly="1"/>
+                            </list>
+                        </field>
+                    </div>
+                    <group invisible="state != 'done'">
+                        <div class="alert alert-success">
+                            <i class="fa fa-check-circle"/>
+                            Importación completada.
+                        </div>
+                        <group>
+                            <field name="updated_count" readonly="1"/>
+                            <field name="created_count" readonly="1"/>
+                            <field name="error_count" readonly="1"/>
+                            <field name="total_lines" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <footer>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_import_manual_stock" model="ir.actions.act_window">
+        <field name="name">Importar Stock Manual</field>
+        <field name="res_model">import.manual.stock.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+</odoo>
