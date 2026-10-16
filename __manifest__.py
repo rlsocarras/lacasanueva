@@ -41,6 +41,7 @@
         'web.assets_backend': [
             'lacasanueva/static/src/js/finance_balance.js',
             'lacasanueva/static/src/xml/finance_balance.xml',
+            'lacasanueva/static/src/css/manual_stock.css',
         ],
     },
     'demo': [],
