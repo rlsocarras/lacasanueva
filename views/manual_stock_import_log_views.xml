@@ -108,6 +108,7 @@
         <field name="arch" type="xml">
             <list string="Modificar stock manual" editable="bottom" decoration-success="is_manual_stock_modified and last_manual_stock_update >= (context_today() - datetime.timedelta(days=2))">
                 <field name="product_tmpl_id" string="Producto"/>
+                <field name="website_url" string="Sitio web" widget="url" readonly="1"/>
                 <field name="default_code" string="Ref. interna"/>
                 <field name="manual_variant_label" string="Variante"/>
                 <field name="manual_stock" widget="number_increment"/>
