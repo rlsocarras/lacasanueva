@@ -106,7 +106,7 @@
         <field name="name">product.product.manual.stock.modify.list</field>
         <field name="model">product.product</field>
         <field name="arch" type="xml">
-            <list string="Modificar stock manual" editable="bottom">
+            <list string="Modificar stock manual" editable="bottom" decoration-success="is_manual_stock_modified">
                 <field name="default_code"/>
                 <field name="name"/>
                 <field name="manual_stock" widget="number_increment"/>
