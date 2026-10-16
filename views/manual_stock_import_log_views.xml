@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_manual_stock_import_log_tree" model="ir.ui.view">
+        <field name="name">manual.stock.import.log.tree</field>
+        <field name="model">manual.stock.import.log</field>
+        <field name="arch" type="xml">
+            <list string="Importaciones de Stock Manual">
+                <field name="name"/>
+                <field name="import_date"/>
+                <field name="user_id"/>
+                <field name="file_name"/>
+                <field name="total_lines"/>
+                <field name="updated_count" string="Actualizadas"/>
+                <field name="created_count" string="Creadas"/>
+                <field name="error_count" string="Con error"/>
+                <field name="state" decoration-success="state == 'done'" decoration-warning="state == 'draft'" decoration-danger="state == 'cancelled'"/>
+            </list>
+        </field>
+    </record>
+    <record id="view_manual_stock_import_log_form" model="ir.ui.view">
+        <field name="name">manual.stock.import.log.form</field>
+        <field name="model">manual.stock.import.log</field>
+        <field name="arch" type="xml">
+            <form string="Histórico de importación">
+                <header>
+                    <button name="action_download_original" type="object" string="Descargar archivo original" icon="fa-download" invisible="not attachment_id" groups="lacasanueva.group_gestionar_stock_manual"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group>
+                        <field name="name" readonly="1"/>
+                        <field name="import_date" readonly="1"/>
+                        <field name="user_id" readonly="1"/>
+                        <field name="file_name" readonly="1"/>
+                        <field name="file_format" readonly="1"/>
+                        <field name="key_field" readonly="1"/>
+                        <field name="stock_field" readonly="1"/>
+                        <field name="import_mode" readonly="1"/>
+                    </group>
+                    <group>
+                        <field name="total_lines" readonly="1"/>
+                        <field name="valid_lines" readonly="1"/>
+                        <field name="invalid_lines" readonly="1"/>
+                        <field name="updated_count" readonly="1"/>
+                        <field name="created_count" readonly="1"/>
+                        <field name="error_count" readonly="1"/>
+                    </group>
+                    <field name="notes" placeholder="Observaciones"/>
+                    <separator string="Líneas"/>
+                    <field name="line_ids" string="Líneas">
+                            <list name="log_line_tree">
+<field name="line_number" readonly="1"/>
+                        <field name="key_value" readonly="1"/>
+                        <field name="product_id" readonly="1"/>
+                        <field name="current_stock" readonly="1" widget="float"/>
+                        <field name="new_stock" readonly="1" widget="float"/>
+                        <field name="difference" readonly="1" widget="float"/>
+                        <field name="status" readonly="1" decoration-success="status == 'applied'" decoration-warning="status == 'not_found'" decoration-danger="status == 'error'"/>
+                        <field name="applied" readonly="1"/>
+                        <field name="notes" readonly="1"/></list>
+                        </field>
+                </sheet>
+                <footer>
+                    <button string="Cancelar" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="view_manual_stock_import_log_search" model="ir.ui.view">
+        <field name="name">manual.stock.import.log.search</field>
+        <field name="model">manual.stock.import.log</field>
+        <field name="arch" type="xml">
+            <search string="Importaciones">
+                <field name="name" filter_domain="[('name', 'ilike', self)]"/>
+                <field name="user_id"/>
+                <field name="import_date"/>
+                <filter name="state" context="{'search_default_group_by': 'state'}">
+                    <separator/>
+                    <filter string="Completadas" name="done" domain="[('state', '=', 'done')]"/>
+                    <filter string="Con errores" name="errors" domain="[('error_count', '>', 0)]"/>
+                </filter>
+                <separator/>
+                <filter string="Mis importaciones" name="my" domain="[('user_id', '=', uid)]"/>
+                <filter string="Hoy" name="today" domain="[('import_date', '&gt;=', datetime.date().isoformat())]"/>
+                <separator/>
+                <group expand="0" string="Agrupar por">
+                    <filter name="user_id" icon="fa-user" help="Agrupar por usuario"/>
+                    <filter name="state" icon="fa-flag"/>
+                    <filter name="import_date" string="Fecha" context="{'search_default_group_by': 'import_date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    <record id="action_manual_stock_import_log" model="ir.actions.act_window">
+        <field name="name">Historial de Importaciones</field>
+        <field name="res_model">manual.stock.import.log</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_my': 1}</field>
+        <field name="domain">[]</field>
+    </record>
+    <menuitem id="menu_manual_stock" name="Stock Manual" parent="menu_lacasanueva_root" sequence="20" groups="lacasanueva.group_gestionar_stock_manual"/>
+    <menuitem id="menu_import_manual_stock" name="Importar Stock Manual" parent="menu_manual_stock" action="action_import_manual_stock" sequence="1" groups="lacasanueva.group_gestionar_stock_manual"/>
+    <menuitem id="menu_manual_stock_log" name="Historial de Importaciones" parent="menu_manual_stock" action="action_manual_stock_import_log" sequence="2" groups="lacasanueva.group_gestionar_stock_manual"/>
+</odoo>
