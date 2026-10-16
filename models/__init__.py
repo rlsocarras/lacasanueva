@@ -6,3 +6,4 @@ from . import product_product
 from . import website_sale_stock_inherit
 from . import manual_stock_import_log
 from . import manual_stock_import_log_line
+from . import finance_balance
