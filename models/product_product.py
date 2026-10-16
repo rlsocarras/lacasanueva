@@ -114,6 +114,14 @@ class ProductProduct(models.Model):
             raise UserError(_('Solo los usuarios asociados pueden modificar el stock manualmente.'))
         return True
 
+    def action_open_website(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': self.website_url,
+            'target': 'new',
+        }
+
     def action_sync_stock_to_website(self):
         self.ensure_one()
         self._check_user_permission()
