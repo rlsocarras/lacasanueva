@@ -101,4 +101,29 @@
     <menuitem id="menu_manual_stock" name="Stock Manual" parent="menu_lacasanueva_root" sequence="20" groups="lacasanueva.group_gestionar_stock_manual"/>
     <menuitem id="menu_import_manual_stock" name="Importar Stock Manual" parent="menu_manual_stock" action="action_import_manual_stock" sequence="1" groups="lacasanueva.group_gestionar_stock_manual"/>
     <menuitem id="menu_manual_stock_log" name="Historial de Importaciones" parent="menu_manual_stock" action="action_manual_stock_import_log" sequence="2" groups="lacasanueva.group_gestionar_stock_manual"/>
+    <!-- Vista rápida para modificar stock manual por producto/variante -->
+    <record id="view_product_manual_stock_modify_list" model="ir.ui.view">
+        <field name="name">product.product.manual.stock.modify.list</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <list string="Modificar stock manual" editable="bottom">
+                <field name="default_code"/>
+                <field name="name"/>
+                <field name="manual_stock" widget="number_increment"/>
+                <field name="is_manual_stock_modified" readonly="1"/>
+                <field name="last_manual_stock_update" readonly="1"/>
+                <field name="last_manual_stock_user" readonly="1"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_modify_manual_stock" model="ir.actions.act_window">
+        <field name="name">Modificar Stock Manual</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list,form</field>
+        <field name="view_id" ref="view_product_manual_stock_modify_list"/>
+        <field name="target">current</field>
+    </record>
+
+    <menuitem id="menu_modify_manual_stock" name="Modificar Stock Manual" parent="menu_manual_stock" action="action_modify_manual_stock" sequence="0" groups="lacasanueva.group_gestionar_stock_manual"/>
 </odoo>
