@@ -1,3 +1,4 @@
-.o_list_view tbody tr:has(.text-success) {
-    background-color: #d1f2d8 !important;
+.o_list_view tbody tr.o_data_row.text-success,
+.o_list_view tbody tr.o_data_row.decoration-success {
+    background-color: #e8f5e9 !important;
 }

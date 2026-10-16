@@ -42,6 +42,12 @@ class ProductProduct(models.Model):
         store=False,
     )
 
+    manual_variant_label = fields.Char(
+        string='Variante',
+        compute='_compute_manual_variant_label',
+        store=False,
+    )
+
     # Campo para verificar si el usuario actual es asociado
     is_asociado = fields.Boolean(
         string='Es Asociado',
@@ -96,6 +102,11 @@ class ProductProduct(models.Model):
     def _compute_is_variant_view(self):
         for product in self:
             product.is_variant_view = True
+
+    @api.depends('product_template_attribute_value_ids')
+    def _compute_manual_variant_label(self):
+        for product in self:
+            product.manual_variant_label = product.name if product.product_template_attribute_value_ids else 'Sin variante'
 
     @api.model
     def _check_user_permission(self):
