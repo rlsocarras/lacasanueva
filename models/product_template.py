@@ -176,6 +176,14 @@ class ProductTemplate(models.Model):
             }
         }
 
+    def action_open_website(self):
+        self.ensure_one()
+        return {
+            'type': 'ir.actions.act_url',
+            'url': self.website_url,
+            'target': 'new',
+        }
+
     def write(self, vals):
         """Override para trazabilidad cuando se modifica manual_stock"""
         if 'manual_stock' in vals:

@@ -122,6 +122,13 @@ class ProductProduct(models.Model):
             'target': 'new',
         }
 
+    website_link = fields.Char(
+        string='Sitio Web',
+        related='product_tmpl_id.website_url',
+        store=False,
+        readonly=True,
+    )
+
     def action_sync_stock_to_website(self):
         self.ensure_one()
         self._check_user_permission()

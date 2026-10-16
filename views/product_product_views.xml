@@ -38,6 +38,10 @@
                                 string="Sincronizar con Sitio Web"
                                 class="btn-secondary"
                                 icon="fa-globe"/>
+                        <button name="action_open_website" 
+                                type="object" 
+                                icon="fa-globe"
+                                class="btn-sm"/>
                     </group>
                 </group>
             </xpath>
