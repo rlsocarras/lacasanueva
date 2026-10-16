@@ -393,14 +393,12 @@ class ImportManualStockWizard(models.TransientModel):
         self.created_count = created
         self._recompute_stats()
         self.state = 'done'
-
-        log.invalidate()
         return {
             'type': 'ir.actions.act_window',
             'name': _('Detalle de importación'),
             'res_model': 'manual.stock.import.log',
             'view_mode': 'form',
-            'views': [(log.id, 'form')],
+            'views': [(False, 'form')],
             'res_id': log.id,
             'target': 'current',
         }

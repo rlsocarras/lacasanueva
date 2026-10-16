@@ -88,10 +88,6 @@
                     <filter name="state" icon="fa-flag"/>
                     <filter name="import_date" string="Fecha" context="{'search_default_group_by': 'import_date'}"/>
                 </group>
-                <searchpanel>
-                    <field name="user_id" select="one"/>
-                    <field name="state" select="one"/>
-                </searchpanel>
             </search>
         </field>
     </record>
@@ -102,8 +98,7 @@
         <field name="context">{'search_default_my': 1}</field>
         <field name="domain">[]</field>
     </record>
-    <menuitem id="menu_lacasonueva_root" name="La Casa Nueva" sequence="100" groups="lacasanueva.group_gestionar_stock_manual"/>
-    <menuitem id="menu_manual_stock" name="Stock Manual" parent="menu_lacasonueva_root" sequence="10" groups="lacasanueva.group_gestionar_stock_manual"/>
+    <menuitem id="menu_manual_stock" name="Stock Manual" parent="menu_lacasanueva_root" sequence="20" groups="lacasanueva.group_gestionar_stock_manual"/>
     <menuitem id="menu_import_manual_stock" name="Importar Stock Manual" parent="menu_manual_stock" action="action_import_manual_stock" sequence="1" groups="lacasanueva.group_gestionar_stock_manual"/>
     <menuitem id="menu_manual_stock_log" name="Historial de Importaciones" parent="menu_manual_stock" action="action_manual_stock_import_log" sequence="2" groups="lacasanueva.group_gestionar_stock_manual"/>
 </odoo>

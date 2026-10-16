@@ -1,6 +1,6 @@
 {
     'name': 'La Casa Nueva',
-    'version': '18.0.1.0.0',
+    'version': '18.0.1.0.1',
     'category': 'Inventory/Inventory',
     'summary': 'Modificar stock manualmente en productos para usuarios asociados',
     'description': """
