@@ -113,7 +113,6 @@
                 <field name="default_code" string="Ref. interna"/>
                 <field name="manual_variant_label" string="Variante"/>
                 <field name="manual_stock" widget="number_increment"/>
-                <field name="website_link" widget="url" readonly="1" string="Web"/>
                 <field name="is_manual_stock_modified" readonly="1"/>
                 <field name="last_manual_stock_update" readonly="1"/>
                 <field name="last_manual_stock_user" readonly="1"/>
