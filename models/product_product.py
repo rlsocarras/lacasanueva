@@ -1,6 +1,9 @@
 # -*- coding: utf-8 -*-
+from datetime import timedelta
+
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
+from odoo.fields import context_today
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -34,6 +37,12 @@ class ProductProduct(models.Model):
         string='Actualizado Por',
         readonly=True,
         tracking=True,
+    )
+
+    modified_last_3_days = fields.Boolean(
+        string='Modificado últimos 3 días',
+        compute='_compute_modified_last_3_days',
+        store=False,
     )
 
     is_variant_view = fields.Boolean(
@@ -107,6 +116,16 @@ class ProductProduct(models.Model):
     def _compute_manual_variant_label(self):
         for product in self:
             product.manual_variant_label = product.name if product.product_template_attribute_value_ids else 'Sin variante'
+
+    @api.depends('last_manual_stock_update')
+    def _compute_modified_last_3_days(self):
+        for rec in self:
+            if rec.last_manual_stock_update:
+                rec.modified_last_3_days = (
+                    rec.last_manual_stock_update.date() >= (context_today() - timedelta(days=2))
+                )
+            else:
+                rec.modified_last_3_days = False
 
     @api.model
     def _check_user_permission(self):

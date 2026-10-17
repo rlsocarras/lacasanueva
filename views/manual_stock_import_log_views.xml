@@ -106,7 +106,7 @@
         <field name="name">product.product.manual.stock.modify.list</field>
         <field name="model">product.product</field>
         <field name="arch" type="xml">
-            <list string="Modificar stock manual" editable="bottom" create="false" decoration-success="is_manual_stock_modified and last_manual_stock_update >= (context_today() - datetime.timedelta(days=2))">
+            <list string="Modificar stock manual" editable="bottom" create="false" decoration-success="modified_last_3_days">
                 <field name="product_tmpl_id" string="Producto" readonly="1"/>
                 <field name="name" string="Nombre"/>
                 <button name="action_open_website" type="object" icon="fa-globe" title="Ver en sitio web"/>
