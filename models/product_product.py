@@ -3,7 +3,6 @@ from datetime import timedelta
 
 from odoo import models, fields, api, _
 from odoo.exceptions import UserError
-from odoo.fields import context_today
 import logging
 
 _logger = logging.getLogger(__name__)
@@ -119,10 +118,11 @@ class ProductProduct(models.Model):
 
     @api.depends('last_manual_stock_update')
     def _compute_modified_last_3_days(self):
+        today = fields.Date.context_today(self)
         for rec in self:
             if rec.last_manual_stock_update:
                 rec.modified_last_3_days = (
-                    rec.last_manual_stock_update.date() >= (context_today() - timedelta(days=2))
+                    rec.last_manual_stock_update.date() >= (today - timedelta(days=2))
                 )
             else:
                 rec.modified_last_3_days = False
