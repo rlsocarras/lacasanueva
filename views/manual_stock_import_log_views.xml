@@ -143,4 +143,24 @@
     </record>
 
     <menuitem id="menu_modify_manual_stock" name="Modificar Stock Manual" parent="menu_manual_stock" action="action_modify_manual_stock" sequence="0" groups="lacasanueva.group_gestionar_stock_manual"/>
+    <!-- Vista de solo lectura para consultar stock manual -->
+    <record id="view_product_manual_stock_consult_list" model="ir.ui.view">
+        <field name="name">product.product.manual.stock.consult.list</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <list string="Consultar stock manual" create="false" edit="false" delete="false">
+                <field name="product_tmpl_id" string="Producto" readonly="1"/>
+                <field name="manual_stock" string="Stock manual" readonly="1"/>
+            </list>
+        </field>
+    </record>
+    <record id="action_consult_manual_stock" model="ir.actions.act_window">
+        <field name="name">Consultar Stock Manual</field>
+        <field name="res_model">product.product</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_product_manual_stock_consult_list"/>
+        <field name="context">{}</field>
+        <field name="target">current</field>
+    </record>
+    <menuitem id="menu_consult_manual_stock" name="Consultar Stock Manual" parent="menu_manual_stock" action="action_consult_manual_stock" sequence="3"/>
 </odoo>
