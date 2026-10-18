@@ -8,24 +8,26 @@ class FinanceBalanceAnalysis(models.AbstractModel):
 
     @api.model
     def get_balance_data(self, date_from, date_to):
-        """
-        Calcula los totales de ventas, compras y ganancia/pérdida
-        para el rango de fechas especificado, además de las series
-        mensuales de ventas y compras para el gráfico lineal.
-        """
         domain_base = [
-            ('state', '=', 'posted'),
             ('invoice_date', '>=', date_from),
             ('invoice_date', '<=', date_to),
         ]
+        sales_domain = [
+            ('date_order', '>=', date_from),
+            ('date_order', '<=', date_to),
+        ]
+        purchases_domain = [
+            ('date_order', '>=', date_from),
+            ('date_order', '<=', date_to),
+        ]
 
-        sales_total = self._read_amounts(domain_base, 'out_invoice')
-        purchases_total = self._read_amounts(domain_base, 'in_invoice')
+        sales_total = self._read_order_amounts('sale.order', sales_domain)
+        purchases_total = self._read_order_amounts('purchase.order', purchases_domain)
 
         profit = sales_total - purchases_total
 
         labels, sales_series, purchases_series = self._monthly_series(
-            domain_base, date_from, date_to
+            sales_domain, purchases_domain, date_from, date_to
         )
 
         return {
@@ -37,46 +39,61 @@ class FinanceBalanceAnalysis(models.AbstractModel):
             'purchases_series': purchases_series,
         }
 
-    def _read_amounts(self, domain, move_type):
-        """Suma del importe total de las facturas de un tipo."""
+    def _read_amounts(self, domain, move_types):
         data = self.env['account.move'].read_group(
-            domain + [('move_type', '=', move_type)],
+            domain + [('move_type', 'in', move_types)],
+            ['amount_untaxed'],
+            [],
+        )
+        return data[0]['amount_untaxed'] if data else 0.0
+
+    def _read_order_amounts(self, model, domain):
+        data = self.env[model].read_group(
+            domain,
             ['amount_total'],
             [],
         )
         return data[0]['amount_total'] if data else 0.0
 
-    def _monthly_series(self, domain_base, date_from, date_to):
-        """Series mensuales de ventas y compras dentro del rango."""
+    def _monthly_series(self, sales_domain, purchases_domain, date_from, date_to):
         months = self._list_months(date_from, date_to)
 
-        sales_by_month = dict(self._amounts_by_month(domain_base, 'out_invoice'))
-        purchases_by_month = dict(self._amounts_by_month(domain_base, 'in_invoice'))
+        sales_by_month = dict(self._order_amounts_by_month('sale.order', sales_domain))
+        purchases_by_month = dict(self._order_amounts_by_month('purchase.order', purchases_domain))
 
         sales_series = [round(sales_by_month.get(m, 0.0), 2) for m in months]
         purchases_series = [round(purchases_by_month.get(m, 0.0), 2) for m in months]
         return months, sales_series, purchases_series
 
-    def _amounts_by_month(self, domain_base, move_type):
-        """Parejas (mes 'YYYY-MM', importe) agrupadas por mes de factura."""
+    def _amounts_by_month(self, domain_base, move_types):
         rows = self.env['account.move'].read_group(
-            domain_base + [('move_type', '=', move_type)],
-            ['amount_total'],
+            domain_base + [('move_type', 'in', move_types)],
+            ['amount_untaxed'],
             ['invoice_date:month'],
         )
         result = []
         for row in rows:
-            # Odoo devuelve una etiqueta localizada en la clave del grupo
-            # (ej: "octubre 2026"); la fecha real del inicio del mes
-            # está disponible en __range, en formato 'YYYY-MM-DD'
             rango = (row.get('__range') or {}).get('invoice_date:month') or {}
+            inicio = rango.get('from')
+            if inicio:
+                result.append((str(inicio)[:7], row['amount_untaxed'] or 0.0))
+        return result
+
+    def _order_amounts_by_month(self, model, domain):
+        rows = self.env[model].read_group(
+            domain,
+            ['amount_total'],
+            ['date_order:month'],
+        )
+        result = []
+        for row in rows:
+            rango = (row.get('__range') or {}).get('date_order:month') or {}
             inicio = rango.get('from')
             if inicio:
                 result.append((str(inicio)[:7], row['amount_total'] or 0.0))
         return result
 
     def _list_months(self, date_from, date_to):
-        """Lista de meses ('YYYY-MM') que cubre el rango de fechas."""
         start_year, start_month, _ = (int(p) for p in str(date_from).split('-'))
         end_year, end_month, _ = (int(p) for p in str(date_to).split('-'))
         months = []

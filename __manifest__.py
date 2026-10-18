@@ -21,7 +21,7 @@
         'product',
         'website_sale',
         'website_sale_stock',
-        'sale_management',
+        'purchase',
         'account',
         
     ],

@@ -63,6 +63,30 @@ class TestFinanceBalanceAnalysis(TransactionCase):
             factura.action_post()
         return factura
 
+    def _creating_confirmed_invoice(self, move_type, partner, fecha, importe):
+        """Crea y confirma una factura sin publicarla (state='confirmed')."""
+        type(self)._doc_counter += 1
+        numero_doc = 'PR%07d' % type(self)._doc_counter
+        faktura = self.env['account.move'].create({
+            'move_type': move_type,
+            'partner_id': partner.id,
+            'invoice_date': fecha,
+            'l10n_latam_document_number': numero_doc,
+            'invoice_line_ids': [(0, 0, {
+                'name': 'Línea de prueba',
+                'account_id': (
+                    self.account_ingreso.id if move_type == 'out_invoice'
+                    else self.account_gasto.id
+                ),
+                'price_unit': importe,
+                'quantity': 1,
+            })],
+        })
+        # Confirmar sin publicar en contabilidad
+        if hasattr(faktura, 'action_confirm'):
+            faktura.action_confirm()
+        return faktura
+
     # ------------------------------------------------------------------
     # Totales (gráfico de barras)
     # ------------------------------------------------------------------
@@ -78,14 +102,15 @@ class TestFinanceBalanceAnalysis(TransactionCase):
         self.assertAlmostEqual(resultado['purchases'], 400.0)
         self.assertAlmostEqual(resultado['profit'], 1100.0)
 
-    def test_solo_se_cuentan_facturas_publicadas(self):
-        self._crear_factura('out_invoice', self.partner_venta, f'{ANIO_PRUEBAS}-08-10', 900.0, post=False)
-        self._crear_factura('out_invoice', self.partner_venta, f'{ANIO_PRUEBAS}-08-12', 300.0)
+    def test_todas_las_facturas_se_cuentan_sin_importar_el_estado(self):
+        # Ahora todas las facturas cuentan, sin importar su estado
+        self._ crear_factura('out_invoice', self.partner_venta, f'{ANIO_PRUEBAS}-08-10', 900.0, post=False)
+        self._ crear_factura('out_invoice', self.partner_venta, f'{ANIO_PRUEBAS}-08-12', 300.0)
 
         resultado = self.analysis.get_balance_data(f'{ANIO_PRUEBAS}-08-01', f'{ANIO_PRUEBAS}-08-31')
 
-        self.assertAlmostEqual(resultado['sales'], 300.0)
-        self.assertEqual(resultado['sales_series'], [300.0])
+        self.assertAlmostEqual(resultado['sales'], 1200.0)
+        self.assertEqual(resultado['sales_series'], [1200.0])
 
     def test_rango_de_fechas_limita_los_resultados(self):
         self._crear_factura('out_invoice', self.partner_venta, f'{ANIO_PRUEBAS}-07-31', 100.0)
@@ -139,3 +164,4 @@ class TestFinanceBalanceAnalysis(TransactionCase):
 
         self.assertEqual(len(resultado['labels']), len(resultado['sales_series']))
         self.assertEqual(len(resultado['labels']), len(resultado['purchases_series']))
+
