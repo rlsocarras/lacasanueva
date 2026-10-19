@@ -15,10 +15,12 @@ class FinanceBalanceAnalysis(models.AbstractModel):
         sales_domain = [
             ('date_order', '>=', date_from),
             ('date_order', '<=', date_to),
+            ('state', 'in', ['sale', 'done']),
         ]
         purchases_domain = [
             ('date_order', '>=', date_from),
             ('date_order', '<=', date_to),
+            ('state', 'in', ['purchase', 'done']),
         ]
 
         sales_total = self._read_order_amounts('sale.order', sales_domain)

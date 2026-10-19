@@ -28,14 +28,15 @@
     'data': [
         'security/la_casa_nueva_security.xml',  
         'security/ir.model.access.csv',
+        #dashboard
+        'views/finance_balance_views.xml',
         'views/res_users_views.xml',
         'views/product_template_views.xml',
         'views/product_product_views.xml',
         'views/website_templates.xml',
         'wizard/import_manual_stock_wizard_views.xml',
         'views/manual_stock_import_log_views.xml',
-        #dashboard
-        'views/finance_balance_views.xml',
+        
     ],
     'assets': {
         'web.assets_backend': [
