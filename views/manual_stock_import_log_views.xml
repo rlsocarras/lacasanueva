@@ -125,7 +125,10 @@
         <field name="model">product.product</field>
         <field name="arch" type="xml">
             <search string="Modificar Stock Manual">
-                <filter name="no_updated_3_days" string="No actualizado (últimos 3 días)"
+                <field name="name" string="Nombre"/>
+                <field name="default_code" string="Ref. interna"/>
+                <field name="product_tmpl_id" string="Producto"/>
+                <filter name="no_updated_3_days" string="No actualizado (Ãºltimos 3 dÃ­as)"
                         domain="['|', ('last_manual_stock_update', '=', False), ('last_manual_stock_update', '&lt;', context_today() - datetime.timedelta(days=2))]"/>
                 <field name="last_manual_stock_update"/>
             </search>
@@ -154,11 +157,23 @@
             </list>
         </field>
     </record>
+    <record id="view_product_manual_stock_consult_search" model="ir.ui.view">
+        <field name="name">product.product.manual.stock.consult.search</field>
+        <field name="model">product.product</field>
+        <field name="arch" type="xml">
+            <search string="Consultar Stock Manual">
+                <field name="name" string="Nombre"/>
+                <field name="default_code" string="Ref. interna"/>
+                <field name="product_tmpl_id" string="Producto"/>
+            </search>
+        </field>
+    </record>
     <record id="action_consult_manual_stock" model="ir.actions.act_window">
         <field name="name">Consultar Stock Manual</field>
         <field name="res_model">product.product</field>
         <field name="view_mode">list</field>
         <field name="view_id" ref="view_product_manual_stock_consult_list"/>
+        <field name="search_view_id" ref="view_product_manual_stock_consult_search"/>
         <field name="context">{}</field>
         <field name="target">current</field>
     </record>
