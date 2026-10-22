@@ -8,23 +8,19 @@ class FinanceBalanceAnalysis(models.AbstractModel):
 
     @api.model
     def get_balance_data(self, date_from, date_to):
-        domain_base = [
-            ('invoice_date', '>=', date_from),
-            ('invoice_date', '<=', date_to),
-        ]
         sales_domain = [
-            ('date_order', '>=', date_from),
-            ('date_order', '<=', date_to),
-            ('state', 'in', ['sale', 'done']),
+            ('date', '>=', date_from),
+            ('date', '<=', date_to),
+            ('state', 'not in', ['draft', 'cancel', 'sent']),
         ]
         purchases_domain = [
             ('date_order', '>=', date_from),
             ('date_order', '<=', date_to),
-            ('state', 'in', ['purchase', 'done']),
+            ('state', 'not in', ['draft', 'cancel', 'sent']),
         ]
 
-        sales_total = self._read_order_amounts('sale.order', sales_domain)
-        purchases_total = self._read_order_amounts('purchase.order', purchases_domain)
+        sales_total = self._read_order_amounts('sale.report', sales_domain, amount_field='price_subtotal', date_field='date')
+        purchases_total = self._read_order_amounts('purchase.report', purchases_domain, amount_field='untaxed_total', date_field='date_order')
 
         profit = sales_total - purchases_total
 
@@ -49,19 +45,19 @@ class FinanceBalanceAnalysis(models.AbstractModel):
         )
         return data[0]['amount_untaxed'] if data else 0.0
 
-    def _read_order_amounts(self, model, domain):
+    def _read_order_amounts(self, model, domain, amount_field='price_subtotal', date_field='date'):
         data = self.env[model].read_group(
             domain,
-            ['amount_total'],
+            [amount_field],
             [],
         )
-        return data[0]['amount_total'] if data else 0.0
+        return data[0][amount_field] if data else 0.0
 
     def _monthly_series(self, sales_domain, purchases_domain, date_from, date_to):
         months = self._list_months(date_from, date_to)
 
-        sales_by_month = dict(self._order_amounts_by_month('sale.order', sales_domain))
-        purchases_by_month = dict(self._order_amounts_by_month('purchase.order', purchases_domain))
+        sales_by_month = dict(self._order_amounts_by_month('sale.report', sales_domain, amount_field='price_subtotal', date_field='date'))
+        purchases_by_month = dict(self._order_amounts_by_month('purchase.report', purchases_domain, amount_field='untaxed_total', date_field='date_order'))
 
         sales_series = [round(sales_by_month.get(m, 0.0), 2) for m in months]
         purchases_series = [round(purchases_by_month.get(m, 0.0), 2) for m in months]
@@ -81,18 +77,18 @@ class FinanceBalanceAnalysis(models.AbstractModel):
                 result.append((str(inicio)[:7], row['amount_untaxed'] or 0.0))
         return result
 
-    def _order_amounts_by_month(self, model, domain):
+    def _order_amounts_by_month(self, model, domain, amount_field='price_subtotal', date_field='date'):
         rows = self.env[model].read_group(
             domain,
-            ['amount_total'],
-            ['date_order:month'],
+            [amount_field],
+            ['%s:month' % date_field],
         )
         result = []
         for row in rows:
-            rango = (row.get('__range') or {}).get('date_order:month') or {}
+            rango = (row.get('__range') or {}).get('%s:month' % date_field) or {}
             inicio = rango.get('from')
             if inicio:
-                result.append((str(inicio)[:7], row['amount_total'] or 0.0))
+                result.append((str(inicio)[:7], row[amount_field] or 0.0))
         return result
 
     def _list_months(self, date_from, date_to):
