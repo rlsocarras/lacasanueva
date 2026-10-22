@@ -108,7 +108,7 @@
         <field name="arch" type="xml">
             <list string="Modificar stock manual" editable="bottom" create="false" decoration-success="modified_last_3_days">
                 <field name="product_tmpl_id" string="Producto" readonly="1"/>
-                <field name="name" string="Nombre"/>
+                <field name="name" string="Producto" filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>
                 <button name="action_open_website" type="object" icon="fa-globe" title="Ver en sitio web"/>
                 <field name="default_code" string="Ref. interna"/>
                 <field name="manual_variant_label" string="Variante"/>
@@ -125,7 +125,7 @@
         <field name="model">product.product</field>
         <field name="arch" type="xml">
             <search string="Modificar Stock Manual">
-                <field name="name" string="Nombre"/>
+                <field name="name" string="Producto" filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>
                 <field name="default_code" string="Ref. interna"/>
                 <field name="product_tmpl_id" string="Producto"/>
                 <filter name="no_updated_3_days" string="No actualizado (Ãºltimos 3 dÃ­as)"
@@ -162,7 +162,7 @@
         <field name="model">product.product</field>
         <field name="arch" type="xml">
             <search string="Consultar Stock Manual">
-                <field name="name" string="Nombre"/>
+                <field name="name" string="Producto" filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>
                 <field name="default_code" string="Ref. interna"/>
                 <field name="product_tmpl_id" string="Producto"/>
             </search>
