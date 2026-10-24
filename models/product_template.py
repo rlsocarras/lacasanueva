@@ -103,7 +103,7 @@ class ProductTemplate(models.Model):
     def _compute_is_asociado(self):
         """Verificar si el usuario actual es asociado o admin"""
         is_asociado = (
-            self.env.user.is_asociado 
+            self.env.user.has_group('lacasanueva.group_gestionar_stock_manual')
         )
         for template in self:
             template.is_asociado = is_asociado
@@ -159,7 +159,7 @@ class ProductTemplate(models.Model):
         """Sincronizar stock manual con el sitio web"""
         self.ensure_one()
         
-        if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
+        if not self.env.user.has_group('lacasanueva.group_gestionar_stock_manual') and not self.env.user.has_group('base.group_system'):
             raise UserError(_('Solo los usuarios asociados pueden sincronizar stock.'))
         
         for variant in self.product_variant_ids:
@@ -187,7 +187,7 @@ class ProductTemplate(models.Model):
     def write(self, vals):
         """Override para trazabilidad cuando se modifica manual_stock"""
         if 'manual_stock' in vals:
-            if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
+            if not self.env.user.has_group('lacasanueva.group_gestionar_stock_manual') and not self.env.user.has_group('base.group_system'):
                 raise UserError(_('Solo los usuarios asociados pueden modificar el stock manualmente.'))
         
         return super().write(vals)

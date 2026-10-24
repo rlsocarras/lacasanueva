@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- ============================================ -->
-    <!-- Vista de formulario de variante (acceso directo) -->
-    <!-- ============================================ -->
-    <record id="product_product_form_view_la_casa_nueva" model="ir.ui.view">
+        <!-- ============================================ -->
+        <!-- Vista de formulario de variante (acceso directo) -->
+        <!-- ============================================ -->
+        <record id="product_product_form_view_la_casa_nueva" model="ir.ui.view">
         <field name="name">product.product.form.la.casa.nueva</field>
         <field name="model">product.product</field>
         <field name="inherit_id" ref="product.product_normal_form_view"/>
@@ -131,5 +131,4 @@
             </xpath>
         </field>
     </record>
-
 </odoo>

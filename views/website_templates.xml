@@ -364,4 +364,27 @@
             
         </xpath>
     </template>
+
+    <template id="product_manual_stock_in_product_item" inherit_id="website_sale.products_item" name="Product Manual Stock in Product Item" priority="99">
+        <xpath expr="//div[hasclass('o_wsale_product_information_text')]" position="after">
+            <t t-if="product and product.is_asociado and product.stock_display_mode == 'manual'">
+                <t t-set="current_variant" t-value="product.product_variant_id"/>
+                <t t-set="manual_qty" t-value="current_variant.manual_stock"/>
+                <div class="lcn-stock-container-item mt-1">
+                    <div t-if="manual_qty &gt; 10" class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded small" style="background-color:#d1e7dd;color:#0a3622;border:1px solid #a3cfbb;">
+                        <i class="fa fa-check-circle" style="color:#198754;"/>
+                        <span><strong>En stock</strong> — <strong><t t-out="int(manual_qty)"/></strong> uds.</span>
+                    </div>
+                    <div t-elif="manual_qty &gt; 0" class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded small" style="background-color:#fff3cd;color:#664d03;border:1px solid #ffe69c;">
+                        <i class="fa fa-fire" style="color:#cc9a06;"/>
+                        <span><strong>¡Últimas unidades!</strong> — solo <strong><t t-out="int(manual_qty)"/></strong></span>
+                    </div>
+                    <div t-else="" class="d-inline-flex align-items-center gap-1 px-2 py-1 rounded small" style="background-color:#f8d7da;color:#58151c;border:1px solid #f1aeb5;">
+                        <i class="fa fa-times-circle" style="color:#dc3545;"/>
+                        <span><strong>Producto agotado</strong></span>
+                    </div>
+                </div>
+            </t>
+        </xpath>
+    </template>
 </odoo>

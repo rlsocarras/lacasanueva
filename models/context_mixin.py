@@ -11,7 +11,7 @@ class ProductTemplateContext(models.AbstractModel):
         context = dict(context or {})
         
         # Agregar flags al contexto basados en el usuario
-        context['is_asociado'] = self.env.user.is_asociado or self.env.user.has_group('base.group_system')
+        context['is_asociado'] = self.env.user.has_group('lacasanueva.group_gestionar_stock_manual') or self.env.user.has_group('base.group_system')
         context['show_manual_stock'] = context['is_asociado']
         
         return super().get_view(view_id=view_id, view_type=view_type, context=context, 

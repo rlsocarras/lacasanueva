@@ -102,7 +102,7 @@ class ProductProduct(models.Model):
     def _compute_is_asociado(self):
         """Verificar si el usuario actual es asociado o admin"""
         is_asociado = (
-            self.env.user.is_asociado 
+            self.env.user.has_group('lacasanueva.group_gestionar_stock_manual')
         )
         for product in self:
             product.is_asociado = is_asociado
@@ -129,7 +129,7 @@ class ProductProduct(models.Model):
 
     @api.model
     def _check_user_permission(self):
-        if not self.env.user.is_asociado and not self.env.user.has_group('base.group_system'):
+        if not self.env.user.has_group('lacasanueva.group_gestionar_stock_manual') and not self.env.user.has_group('base.group_system'):
             raise UserError(_('Solo los usuarios asociados pueden modificar el stock manualmente.'))
         return True
 

@@ -177,5 +177,5 @@
         <field name="context">{}</field>
         <field name="target">current</field>
     </record>
-    <menuitem id="menu_consult_manual_stock" name="Consultar Stock Manual" parent="menu_manual_stock" action="action_consult_manual_stock" sequence="3"/>
+    <menuitem id="menu_consult_manual_stock" name="Consultar Stock Manual" parent="menu_manual_stock" action="action_consult_manual_stock" sequence="3" groups="lacasanueva.group_gestionar_stock_manual"/>
 </odoo>

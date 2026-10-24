@@ -1,25 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    <!-- Categoría del módulo -->
-    <record id="module_category_lacasanueva" model="ir.module.category">
-        <field name="name">La Casa Nueva</field>
-        <field name="description">Gestión de stock manual</field>
-        <field name="sequence">100</field>
-    </record>
+        <!-- Categoría del módulo -->
+        <record id="module_category_lacasanueva" model="ir.module.category">
+            <field name="name">La Casa Nueva</field>
+            <field name="description">Gestión de stock manual</field>
+            <field name="sequence">100</field>
+        </record>
 
-    <!-- Grupo: Gestionar stock manual -->
-    <record id="group_gestionar_stock_manual" model="res.groups">
-        <field name="name">Gestionar stock manual</field>
-        <field name="category_id" ref="module_category_lacasanueva"/>
-        <field name="comment">Permite modificar el stock manual de los productos</field>
-    </record>
+        <!-- Grupo: Gestionar stock manual -->
+        <record id="group_gestionar_stock_manual" model="res.groups">
+            <field name="name">Gestionar stock manual</field>
+            <field name="category_id" ref="module_category_lacasanueva"/>
+            <field name="comment">Permite modificar el stock manual de los productos</field>
+        </record>
 
-    <!-- Secuencia para los tickets de importacion -->
-    <record id="ir_sequence_manual_stock_import" model="ir.sequence">
-        <field name="name">Importaciones stock manual</field>
-        <field name="code">manual.stock.import</field>
-        <field name="padding">4</field>
-        <field name="number_increment">1</field>
-        <field name="number_next">1</field>
-    </record>
+        <!-- Secuencia para los tickets de importacion -->
+        <record id="ir_sequence_manual_stock_import" model="ir.sequence">
+            <field name="name">Importaciones stock manual</field>
+            <field name="code">manual.stock.import</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="number_next">1</field>
+        </record>
+
+        <!-- Grupo: Ver reporte balance ventas compras -->
+        <record id="group_ver_reporte_balance" model="res.groups">
+            <field name="name">Ver reporte balance ventas compras</field>
+            <field name="category_id" ref="module_category_lacasanueva"/>
+            <field name="comment">Permite acceder al reporte de balance de ventas y compras</field>
+        </record>
 </odoo>

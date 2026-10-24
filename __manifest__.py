@@ -26,8 +26,10 @@
         
     ],
     'data': [
-        'security/la_casa_nueva_security.xml',  
+'security/la_casa_nueva_security.xml',
+        'security/security.xml',
         'security/ir.model.access.csv',
+
         #dashboard
         'views/finance_balance_views.xml',
         'views/res_users_views.xml',
