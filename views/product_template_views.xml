@@ -79,6 +79,9 @@
                 <field name="manual_stock_summary" 
                        string="Stock Manual Total"
                        optional="show"/>
+                <field name="last_import_date" 
+                       string="Última importación"
+                       optional="show"/>
             </xpath>
         </field>
     </record>

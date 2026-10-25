@@ -38,6 +38,13 @@ class ProductProduct(models.Model):
         tracking=True,
     )
 
+    last_import_date = fields.Datetime(
+        string='Última importación',
+        compute='_compute_last_import_date',
+        store=False,
+        readonly=True,
+    )
+
     modified_last_3_days = fields.Boolean(
         string='Modificado últimos 3 días',
         compute='_compute_modified_last_3_days',
@@ -110,6 +117,14 @@ class ProductProduct(models.Model):
     def _compute_is_variant_view(self):
         for product in self:
             product.is_variant_view = True
+
+    @api.depends('manual_stock')
+    def _compute_last_import_date(self):
+        for product in self:
+            line = self.env['manual.stock.import.log.line'].search(
+                [('product_id', '=', product.id), ('applied', '=', True)],
+                order='id desc', limit=1)
+            product.last_import_date = line.log_id.import_date if line else False
 
     @api.depends('product_template_attribute_value_ids')
     def _compute_manual_variant_label(self):

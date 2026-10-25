@@ -116,6 +116,7 @@
                 <field name="is_manual_stock_modified" readonly="1"/>
                 <field name="last_manual_stock_update" readonly="1"/>
                 <field name="last_manual_stock_user" readonly="1"/>
+                <field name="last_import_date" readonly="1"/>
             </list>
         </field>
     </record>
@@ -128,7 +129,7 @@
                 <field name="name" string="Producto" filter_domain="['|', '|', ('default_code', 'ilike', self), ('name', 'ilike', self), ('barcode', 'ilike', self)]"/>
                 <field name="default_code" string="Ref. interna"/>
                 <field name="product_tmpl_id" string="Producto"/>
-                <filter name="no_updated_3_days" string="No actualizado (Ãºltimos 3 dÃ­as)"
+                <filter name="no_updated_3_days" string="No actualizado (Últimos 3 dí­as)"
                         domain="['|', ('last_manual_stock_update', '=', False), ('last_manual_stock_update', '&lt;', context_today() - datetime.timedelta(days=2))]"/>
                 <field name="last_manual_stock_update"/>
             </search>

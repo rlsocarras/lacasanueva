@@ -69,6 +69,13 @@ class ProductTemplate(models.Model):
         store=False,
         compute_sudo=False,
     )
+
+    last_import_date = fields.Datetime(
+        string='Última importación',
+        compute='_compute_last_import_date',
+        store=False,
+        readonly=True,
+    )
     # ============================================
     # CAMPO: stock_display_mode (selector de stock)
     # ============================================
@@ -107,6 +114,14 @@ class ProductTemplate(models.Model):
         )
         for template in self:
             template.is_asociado = is_asociado
+
+    @api.depends('product_variant_ids')
+    def _compute_last_import_date(self):
+        for template in self:
+            line = self.env['manual.stock.import.log.line'].search(
+                [('product_id.product_tmpl_id', '=', template.id), ('applied', '=', True)],
+                order='id desc', limit=1)
+            template.last_import_date = line.log_id.import_date if line else False
 
     def _compute_is_variant_view(self):
         for template in self:
