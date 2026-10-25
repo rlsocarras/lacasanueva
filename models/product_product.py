@@ -41,7 +41,7 @@ class ProductProduct(models.Model):
     last_import_date = fields.Datetime(
         string='Última importación',
         compute='_compute_last_import_date',
-        store=False,
+        store=True,
         readonly=True,
     )
 
